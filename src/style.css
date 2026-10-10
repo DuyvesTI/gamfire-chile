@@ -205,7 +205,7 @@ img {
         transform: translateY(0);
     }
     to {
-        transform: translateY(28%);
+        transform: translateY(12%);
     }
 }
 
@@ -655,10 +655,10 @@ img {
 
 @keyframes quoteParallax {
     from {
-        transform: translateY(-8%);
+        transform: translateY(-4%);
     }
     to {
-        transform: translateY(22%);
+        transform: translateY(8%);
     }
 }
 
