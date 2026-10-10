@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- @head -->
+  <title>Gamfire Chile | Equipamiento de Bomberos (One-Page)</title>
+  <meta name="description"
+    content="Venta de equipamiento profesional para bomberos y servicios de emergencia en Chile. Catálogo completo, quiénes somos y contacto directo.">
+</head>
+
+<body class="onepage-layout">
+  <!-- Header con navegación por anclas internas -->
+  <header class="main-header">
+    <div class="container header-content">
+      <a href="#inicio" class="logo">
+        <img src="/logo-gam.png" alt="Logo GAM Fire Chile" class="logo-img" width="48" height="48">
+        <span class="logo-text">GAMFIRE</span> <span class="logo-highlight">CHILE</span>
+      </a>
+      <button class="mobile-toggle" aria-label="Menú" aria-expanded="false" aria-controls="main-nav">☰</button>
+      <nav class="main-nav" id="main-nav">
+        <ul>
+          <li><a href="#inicio">Inicio</a></li>
+          <li><a href="#nosotros">Nosotros</a></li>
+          <li><a href="#catalogo">Catálogo</a></li>
+          <li><a href="#contacto">Contacto</a></li>
+          <li><a href="index.html" class="version-switch-pill" title="Ver versión multipágina">Multi-página ➔</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <div id="app">
+    <main id="main-content">
+      <!-- 1. Hero Section con Parallax -->
+      <section id="inicio" class="hero section-scroll">
+        <div class="hero-bg" aria-hidden="true"></div>
+        <div class="hero-overlay"></div>
+        <div class="container hero-content">
+          <h1>Bienvenidos a Tienda GAM, <br>Compromiso con la Vida</h1>
+          <p>En donde nos dedicamos a la confección de uniformes, ropa de trabajo, overoles y prendas Institucionales.</p>
+          <div class="hero-actions">
+            <a href="#catalogo" class="btn btn-primary">Ver Catálogo</a>
+            <a href="#contacto" class="btn btn-outline" style="margin-left: 0.5rem;">Contáctanos</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. Sección Nosotros -->
+      <section id="nosotros" class="page-content py-xl section-scroll section-alt-bg">
+        <div class="container">
+          <div class="section-header text-center">
+            <h2 class="section-title">Quiénes Somos</h2>
+            <p class="section-subtitle">Comprometidos con la seguridad y protección de quienes arriesgan sus vidas.</p>
+          </div>
+
+          <div class="about-grid">
+            <div class="about-card">
+              <h3>Gamfire Chile</h3>
+              <p>Nos dedicamos a proveer equipamiento de alta calidad para bomberos y equipos de emergencia. Nuestro compromiso es la protección integral con indumentaria y herramientas de estándar profesional.</p>
+            </div>
+            <div class="about-card">
+              <h3>Nuestra Misión</h3>
+              <p>Entregar soluciones confiables y certificadas a precios accesibles para las compañías y cuerpos de bomberos de todo Chile.</p>
+            </div>
+            <div class="about-card">
+              <h3>Nuestros Valores</h3>
+              <ul class="values-list">
+                <li>✓ <strong>Seguridad ante todo:</strong> Productos testeados y normados.</li>
+                <li>✓ <strong>Calidad certificada:</strong> Confección duradera y resistente.</li>
+                <li>✓ <strong>Atención personalizada:</strong> Asesoría directa para cada compañía.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. Sección Catálogo Completo -->
+      <section id="catalogo" class="page-content py-xl section-scroll">
+        <div class="container">
+          <div class="section-header text-center">
+            <h2 class="section-title">Catálogo de Productos</h2>
+            <p class="section-subtitle">Selecciona una categoría para filtrar nuestro equipamiento disponible.</p>
+          </div>
+
+          <div class="catalog-controls" role="toolbar" aria-label="Filtro de productos">
+            <button class="filter-btn btn active" data-filter="all" aria-pressed="true">Todos</button>
+            <button class="filter-btn btn" data-filter="proteccion" aria-pressed="false">Protección</button>
+            <button class="filter-btn btn" data-filter="ropa" aria-pressed="false">Ropa</button>
+            <button class="filter-btn btn" data-filter="herramientas" aria-pressed="false">Herramientas</button>
+            <button class="filter-btn btn" data-filter="accesorios" aria-pressed="false">Accesorios</button>
+          </div>
+
+          <div class="product-grid" id="catalog-grid">
+            <div class="product-card" data-category="proteccion">
+              <div class="product-img-placeholder" role="img" aria-label="Casco F1"></div>
+              <h3>Casco F1</h3>
+              <span class="category">Protección</span>
+              <p>Casco estructural de alto rendimiento para máxima protección craneal y facial.</p>
+              <a href="#contacto" class="btn btn-dark-outline btn-sm">Cotizar</a>
+            </div>
+            <div class="product-card" data-category="ropa">
+              <div class="product-img-placeholder" role="img" aria-label="Chaqueta Normada"></div>
+              <h3>Chaqueta Normada</h3>
+              <span class="category">Ropa</span>
+              <p>Chaqueta con barrera de vapor, resistencia térmica y cintas reflectantes.</p>
+              <a href="#contacto" class="btn btn-dark-outline btn-sm">Cotizar</a>
+            </div>
+            <div class="product-card" data-category="accesorios">
+              <div class="product-img-placeholder" role="img" aria-label="Linterna de Pecho"></div>
+              <h3>Linterna de Pecho</h3>
+              <span class="category">Accesorios</span>
+              <p>Iluminación manos libres LED de alta potencia intrínsecamente segura.</p>
+              <a href="#contacto" class="btn btn-dark-outline btn-sm">Cotizar</a>
+            </div>
+            <div class="product-card" data-category="proteccion">
+              <div class="product-img-placeholder" role="img" aria-label="Era"></div>
+              <h3>Era (Equipo Respiración)</h3>
+              <span class="category">Protección</span>
+              <p>Equipo de respiración autónoma ergonómico y ultraligero con arnés acolchado.</p>
+              <a href="#contacto" class="btn btn-dark-outline btn-sm">Cotizar</a>
+            </div>
+            <div class="product-card" data-category="herramientas">
+              <div class="product-img-placeholder" role="img" aria-label="Hacha de Bombero"></div>
+              <h3>Hacha de Bombero</h3>
+              <span class="category">Herramientas</span>
+              <p>Hacha plana con pico forjado y mango de fibra de vidrio de alta resistencia.</p>
+              <a href="#contacto" class="btn btn-dark-outline btn-sm">Cotizar</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. Sección Contacto -->
+      <section id="contacto" class="page-content py-xl section-scroll section-alt-bg">
+        <div class="container contact-container">
+          <div class="section-header text-center">
+            <h2 class="section-title">Contáctanos</h2>
+            <p class="section-subtitle">¿Dudas sobre stock, tallas o pedidos especiales? Escríbenos directamente.</p>
+          </div>
+
+          <div class="contact-grid">
+            <div class="contact-info">
+              <h3>Información Directa</h3>
+              <p>Atendemos consultas y cotizaciones para compañías en todo Chile.</p>
+              <br>
+              <p><strong>WhatsApp:</strong> <a href="https://wa.me/56979684064" target="_blank" rel="noopener">+56 9 7968 4064</a></p>
+              <p><strong>Facebook:</strong> <a href="https://www.facebook.com/minibomberito" target="_blank" rel="noopener">Gam Fire Chile - Mi Bomberito</a></p>
+              <p><strong>Instagram:</strong> <a href="https://instagram.com/gamfire.chile" target="_blank" rel="noopener">@gamfire.chile</a></p>
+              <p><strong>Email:</strong> <a href="mailto:gamfirechile@gmail.com">gamfirechile@gmail.com</a></p>
+              <br>
+              <div class="map-placeholder">
+                📍 Despachos y envíos a todo Chile
+              </div>
+            </div>
+
+            <form class="contact-form" novalidate>
+              <div id="form-feedback" class="form-feedback" role="alert" aria-live="polite"></div>
+              <div class="form-group">
+                <label for="name">Nombre Completo</label>
+                <input type="text" id="name" name="name" autocomplete="name" required placeholder="Tu nombre">
+              </div>
+              <div class="form-group">
+                <label for="email">Correo Electrónico</label>
+                <input type="email" id="email" name="email" autocomplete="email" inputmode="email" required placeholder="tu@correo.com">
+              </div>
+              <div class="form-group">
+                <label for="message">Mensaje</label>
+                <textarea id="message" name="message" rows="5" required placeholder="Escribe tu consulta o cotización aquí..."></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary">Enviar Mensaje</button>
+            </form>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- @footer -->
+  <script type="module" src="/src/main.js"></script>
+</body>
+
+</html>

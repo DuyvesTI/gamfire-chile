@@ -59,6 +59,11 @@
     padding: 0;
 }
 
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 80px; /* Evita que el header sticky tape los títulos de sección al scrollear */
+}
+
 body {
     font-family: var(--font-main);
     background-color: var(--color-white);
@@ -533,4 +538,82 @@ img {
     .contact-grid {
         grid-template-columns: 1fr;
     }
+}
+
+/* ========================================================
+   Estilos específicos para la Versión One-Page (Una Sola Página)
+   ======================================================== */
+.version-switch-pill {
+    background-color: var(--color-dark-lighter);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ffd700 !important;
+    padding: 0.35rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.25s ease;
+}
+
+.version-switch-pill:hover {
+    background-color: var(--color-primary);
+    color: #ffffff !important;
+    border-color: var(--color-primary);
+    transform: translateY(-1px);
+}
+
+.section-alt-bg {
+    background-color: #fcfcfc;
+    border-top: 1px solid #f0f0f0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.section-header {
+    margin-bottom: 2.5rem;
+}
+
+.section-subtitle {
+    font-size: 1.1rem;
+    color: #666;
+    margin-top: 0.5rem;
+}
+
+.about-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.about-card {
+    background: #ffffff;
+    border: 1px solid #e5e5e5;
+    border-radius: var(--radius-card);
+    padding: 2rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.about-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+}
+
+.about-card h3 {
+    color: var(--color-primary);
+    font-family: var(--font-heading);
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    letter-spacing: 0.5px;
+}
+
+.hero-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.btn-sm {
+    padding: 0.4rem 1rem;
+    font-size: 0.85rem;
+    margin-top: 0.75rem;
 }

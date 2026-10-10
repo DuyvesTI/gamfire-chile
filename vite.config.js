@@ -33,6 +33,7 @@ export default defineConfig({
         nosotros: resolve(__dirname, 'nosotros.html'),
         catalogo: resolve(__dirname, 'catalogo.html'),
         contacto: resolve(__dirname, 'contacto.html'),
+        onepage: resolve(__dirname, 'onepage.html'),
       },
     },
   },
