@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- @head -->
+    <title>Catálogo | Gamfire Chile</title>
+</head>
+
+<body>
+    <!-- @header -->
+    <div id="app">
+        <main id="main-content" class="page-content py-lg">
+            <div class="container">
+                <h1>Catálogo de Productos</h1>
+
+                <div class="catalog-controls" role="toolbar" aria-label="Filtro de productos">
+                    <button class="filter-btn btn active" data-filter="all" aria-pressed="true">Todos</button>
+                    <button class="filter-btn btn" data-filter="proteccion" aria-pressed="false">Protección</button>
+                    <button class="filter-btn btn" data-filter="ropa" aria-pressed="false">Ropa</button>
+                    <button class="filter-btn btn" data-filter="herramientas" aria-pressed="false">Herramientas</button>
+                    <button class="filter-btn btn" data-filter="accesorios" aria-pressed="false">Accesorios</button>
+                </div>
+
+                <div class="product-grid" id="catalog-grid">
+                    <div class="product-card" data-category="proteccion">
+                        <div class="product-img-placeholder"></div>
+                        <h3>Casco F1</h3>
+                        <span class="category">Protección</span>
+                        <p>Casco estructural de alto rendimiento.</p>
+                    </div>
+                    <div class="product-card" data-category="ropa">
+                        <div class="product-img-placeholder"></div>
+                        <h3>Chaqueta Normada</h3>
+                        <span class="category">Ropa</span>
+                        <p>Chaqueta con barrera de vapor y térmica.</p>
+                    </div>
+                    <div class="product-card" data-category="accesorios">
+                        <div class="product-img-placeholder"></div>
+                        <h3>Linterna de Pecho</h3>
+                        <span class="category">Accesorios</span>
+                        <p>Iluminación manos libres LED.</p>
+                    </div>
+                    <div class="product-card" data-category="proteccion">
+                        <div class="product-img-placeholder"></div>
+                        <h3>Era (Equipo Respiración)</h3>
+                        <span class="category">Protección</span>
+                        <p>Equipo de respiración autónoma ligero.</p>
+                    </div>
+                    <div class="product-card" data-category="herramientas">
+                        <div class="product-img-placeholder"></div>
+                        <h3>Hacha de Bombero</h3>
+                        <span class="category">Herramientas</span>
+                        <p>Hacha plana con mango de fibra de vidrio.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <!-- @footer -->
+    <script type="module" src="/src/main.js"></script>
+</body>
+
+</html>
