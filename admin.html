@@ -5,15 +5,23 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex, nofollow, noarchive" />
-  <!-- @head -->
+      <link rel="icon" type="image/png" href="./favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Oswald:wght@500;700&display=swap" />
+    <link rel="expect" href="#main-content" blocking="render" />
+
   <title>Panel de Administración | Gamfire Chile</title>
+  <script type="module" crossorigin src="./assets/admin-SGPoSo2I.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/api-DBeL_fvy.js">
+  <link rel="stylesheet" crossorigin href="./assets/api-MWEpBJBY.css">
 </head>
 
 <body class="admin-body">
   <header class="main-header admin-header">
     <div class="container header-content">
       <div class="logo">
-        <img src="/logo-gam.png" alt="Logo GAM Fire Chile" class="logo-img" width="48" height="48">
+        <img src="./logo-gam.png" alt="Logo GAM Fire Chile" class="logo-img" width="48" height="48">
         <span class="logo-text">GAMFIRE</span> <span class="logo-highlight">ADMIN</span>
       </div>
       <div class="admin-header-right">
@@ -28,7 +36,7 @@
     <!-- 1. VISTA DE LOGIN -->
     <section id="admin-login-view" class="admin-login-card" aria-labelledby="login-title">
       <div class="admin-login-header">
-        <img src="/logo-gam.png" alt="Logo GAM" width="64" height="64" class="admin-login-logo" />
+        <img src="./logo-gam.png" alt="Logo GAM" width="64" height="64" class="admin-login-logo" />
         <h1 id="login-title">Acceso Restringido</h1>
         <p>Ingresa con tus credenciales autorizadas para administrar el catálogo.</p>
       </div>
@@ -305,7 +313,6 @@
     </form>
   </dialog>
 
-  <script type="module" src="/src/admin.js"></script>
 </body>
 
 </html>

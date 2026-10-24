@@ -4,10 +4,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- @head -->
+      <link rel="icon" type="image/png" href="./favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Oswald:wght@500;700&display=swap" />
+    <link rel="expect" href="#main-content" blocking="render" />
+
   <title>Gamfire Chile | Equipamiento de Bomberos (One-Page)</title>
   <meta name="description"
     content="Venta de equipamiento profesional para bomberos y servicios de emergencia en Chile. Catálogo completo, quiénes somos y contacto directo.">
+  <script type="module" crossorigin src="./assets/api-DBeL_fvy.js"></script>
+  <script type="module" crossorigin src="./assets/main-B6A-6vkm.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/api-MWEpBJBY.css">
 </head>
 
 <body class="onepage-layout">
@@ -15,7 +23,7 @@
   <header class="main-header">
     <div class="container header-content">
       <a href="#inicio" class="logo">
-        <img src="/logo-gam.png" alt="Logo GAM Fire Chile" class="logo-img" width="48" height="48">
+        <img src="./logo-gam.png" alt="Logo GAM Fire Chile" class="logo-img" width="48" height="48">
         <span class="logo-text">GAMFIRE</span> <span class="logo-highlight">CHILE</span>
       </a>
       <button class="mobile-toggle" aria-label="Menú" aria-expanded="false" aria-controls="main-nav">☰</button>
@@ -189,8 +197,34 @@
     </main>
   </div>
 
-  <!-- @footer -->
-  <script type="module" src="/src/main.js"></script>
+      <footer class="main-footer">
+      <div class="container footer-grid">
+        <div class="footer-col">
+          <h3>Gamfire Chile</h3>
+          <p>Equipamiento profesional para bomberos y servicios de emergencia.</p>
+        </div>
+        <div class="footer-col">
+          <h3>Enlaces</h3>
+          <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="catalogo.html">Catálogo</a></li>
+            <li><a href="contacto.html">Contacto</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Síguenos</h3>
+          <ul>
+            <li><a href="https://www.facebook.com/minibomberito" target="_blank" rel="noopener">Facebook</a></li>
+            <li><a href="https://instagram.com/gamfire.chile" target="_blank" rel="noopener">Instagram</a></li>
+            <li><a href="https://wa.me/56979684064" target="_blank" rel="noopener">WhatsApp +56 9 7968 4064</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom text-center">
+        <p>&copy; <span id="footer-year">2026</span> Gamfire Chile. Todos los derechos reservados. | Desarrollado por <a href="https://duyvesti.vercel.app" target="_blank" rel="noopener" class="dev-credit">Duyves<span class="ti-highlight">TI</span></a></p>
+      </div>
+    </footer>
+
 </body>
 
 </html>
