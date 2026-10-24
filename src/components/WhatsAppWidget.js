@@ -1,5 +1,5 @@
 // Botón flotante draggable de WhatsApp con ventana de chat emergente
-const WHATSAPP_NUMBER = '56929750390';
+const WHATSAPP_NUMBER = '56979684064';
 
 export function initWhatsAppWidget() {
   // Evitar duplicados si se inicializa más de una vez

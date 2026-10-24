@@ -1,0 +1,24 @@
+[
+  {
+    "id": "usr-admin-1",
+    "username": "admin",
+    "name": "Administrador General",
+    "email": "admin@gamfire.cl",
+    "role": "admin",
+    "salt": "a2e55f6579d4d0c39c524f32f7acbfa0",
+    "passwordHash": "ddaece8da97f5a09f93eb1bb3e601eebecb0ee0cf1a1c06fdfd28ee6798a93d673a96dc199342c61ec69fb6f197aacc57d95c40dccd6ed0010ae6aa843b85c00",
+    "active": true,
+    "createdAt": "2026-10-24T20:06:37.211Z"
+  },
+  {
+    "id": "usr-cat-1",
+    "username": "catalogo",
+    "name": "Encargado de Catálogo",
+    "email": "catalogo@gamfire.cl",
+    "role": "catalogo",
+    "salt": "bc59cba38e2e3105656ca05991f997a6",
+    "passwordHash": "14bc958791474027ac1632341a19ea3ace162d07b9c46a821feea8f61c3209fec2dcafc7f106f6499c0efcd54a7dc3789d79d7fb4258543d64f17e56c03c6339",
+    "active": true,
+    "createdAt": "2026-10-24T20:06:37.438Z"
+  }
+]

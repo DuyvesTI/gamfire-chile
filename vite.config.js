@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
 import { readFileSync } from 'fs';
+import { apiServerPlugin } from './server/apiPlugin.js';
 
 // Inserta los fragmentos de partials/ en cada página al servir/compilar,
 // para que el menú y el pie vengan en el HTML (sin esperar a JavaScript).
@@ -24,8 +25,8 @@ function htmlPartials() {
 }
 
 export default defineConfig({
-  base: '/gamfire-chile-web/',
-  plugins: [htmlPartials()],
+  base: './',
+  plugins: [htmlPartials(), apiServerPlugin()],
   build: {
     rollupOptions: {
       input: {
@@ -34,6 +35,7 @@ export default defineConfig({
         catalogo: resolve(__dirname, 'catalogo.html'),
         contacto: resolve(__dirname, 'contacto.html'),
         onepage: resolve(__dirname, 'onepage.html'),
+        admin: resolve(__dirname, 'admin.html'),
       },
     },
   },

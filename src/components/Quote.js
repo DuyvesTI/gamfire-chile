@@ -1,8 +1,9 @@
 // Cotización por WhatsApp: permite seleccionar uno o más productos del catálogo,
-// indicar cantidad y especificaciones por producto, agregar observaciones generales
+// elegir talla/color disponibles, respetar cantidad mínima de pedido, agregar especificaciones
 // y enviar el resumen como mensaje de WhatsApp.
+import { formatCLP } from '../data/defaultCatalog.js';
 
-const WHATSAPP_NUMBER = '56929750390';
+const WHATSAPP_NUMBER = '56979684064';
 
 export function initQuote() {
   const grid = document.getElementById('catalog-grid');
@@ -11,7 +12,7 @@ export function initQuote() {
   const cards = grid.querySelectorAll('.product-card');
   if (cards.length === 0) return;
 
-  /** @type {Map<string, {name: string, category: string, qty: number, note: string, input: HTMLInputElement}>} */
+  /** @type {Map<string, {name: string, category: string, qty: number, minQty: number, colors: string[], sizes: string[], chosenColor: string, chosenSize: string, unitPriceText: string, note: string, input: HTMLInputElement}>} */
   const selected = new Map();
   const usedIds = new Set();
 
@@ -20,10 +21,28 @@ export function initQuote() {
     const name = card.querySelector('h3')?.textContent.trim() || `Producto ${index + 1}`;
     const category = card.querySelector('.category')?.textContent.trim() || '';
 
+    let meta = {};
+    if (card.dataset.productJson) {
+      try {
+        meta = JSON.parse(card.dataset.productJson);
+      } catch {
+        meta = {};
+      }
+    }
+
     let id = card.dataset.productId || slugify(name) || `producto-${index + 1}`;
     if (usedIds.has(id)) id = `${id}-${index + 1}`;
     usedIds.add(id);
     card.dataset.productId = id;
+
+    const minQty = Math.max(1, Number(meta.minOrderQty) || 1);
+    const colors = Array.isArray(meta.colors) ? meta.colors : [];
+    const sizes = Array.isArray(meta.sizes) ? meta.sizes : [];
+    let unitPriceText = '';
+    if (meta.showPrice) {
+      const effectivePrice = meta.offerPrice || meta.normalPrice;
+      unitPriceText = formatCLP(effectivePrice);
+    }
 
     const label = document.createElement('label');
     label.className = 'quote-toggle';
@@ -41,8 +60,6 @@ export function initQuote() {
 
     label.append(input, offText, onText, srText);
 
-    // Si ya existe un botón con enlace a #contacto o cotizar en la tarjeta (ej. en onepage.html),
-    // lo reemplazamos por el label toggle para mantener una UI consistente y limpia
     const existingCotizarBtn = card.querySelector('a[href="#contacto"], .btn-dark-outline');
     if (existingCotizarBtn) {
       existingCotizarBtn.replaceWith(label);
@@ -52,7 +69,19 @@ export function initQuote() {
 
     input.addEventListener('change', () => {
       if (input.checked) {
-        selected.set(id, { name, category, qty: 1, note: '', input });
+        selected.set(id, {
+          name,
+          category,
+          qty: minQty,
+          minQty,
+          colors,
+          sizes,
+          chosenColor: colors[0] || '',
+          chosenSize: sizes[0] || '',
+          unitPriceText,
+          note: '',
+          input,
+        });
       } else {
         selected.delete(id);
       }
@@ -62,28 +91,35 @@ export function initQuote() {
   });
 
   // ---------- 2. Barra flotante ----------
-  const bar = document.createElement('div');
-  bar.className = 'quote-bar';
-  bar.hidden = true;
-  bar.innerHTML = `
-    <p class="quote-bar-count"><strong>0</strong> <span>productos seleccionados</span></p>
-    <div class="quote-bar-actions">
-      <button type="button" class="btn btn-sm quote-bar-clear">Limpiar</button>
-      <button type="button" class="btn btn-primary btn-sm quote-bar-open" aria-haspopup="dialog">Solicitar cotización</button>
-    </div>
-  `;
+  let bar = document.querySelector('.quote-bar');
+  let live = document.getElementById('quote-live-region');
 
-  // Región viva siempre presente para anunciar cambios a lectores de pantalla
-  const live = createEl('div', 'sr-only');
-  live.setAttribute('aria-live', 'polite');
+  if (!bar) {
+    bar = document.createElement('div');
+    bar.className = 'quote-bar';
+    bar.hidden = true;
+    bar.innerHTML = `
+      <p class="quote-bar-count"><strong>0</strong> <span>productos seleccionados</span></p>
+      <div class="quote-bar-actions">
+        <button type="button" class="btn btn-sm quote-bar-clear">Limpiar</button>
+        <button type="button" class="btn btn-primary btn-sm quote-bar-open" aria-haspopup="dialog">Solicitar cotización</button>
+      </div>
+    `;
+    document.body.appendChild(bar);
+  }
 
-  document.body.append(bar, live);
+  if (!live) {
+    live = createEl('div', 'sr-only');
+    live.id = 'quote-live-region';
+    live.setAttribute('aria-live', 'polite');
+    document.body.appendChild(live);
+  }
 
   const countEl = bar.querySelector('.quote-bar-count strong');
   const countLabel = bar.querySelector('.quote-bar-count span');
 
-  bar.querySelector('.quote-bar-clear').addEventListener('click', clearSelection);
-  bar.querySelector('.quote-bar-open').addEventListener('click', openDialog);
+  bar.querySelector('.quote-bar-clear').onclick = clearSelection;
+  bar.querySelector('.quote-bar-open').onclick = openDialog;
 
   function updateBar() {
     const count = selected.size;
@@ -109,11 +145,14 @@ export function initQuote() {
   }
 
   // ---------- 3. Diálogo de cotización ----------
-  const dialog = document.createElement('dialog');
+  let dialog = document.getElementById('quote-dialog');
+  if (dialog) dialog.remove();
+
+  dialog = document.createElement('dialog');
   dialog.className = 'quote-dialog';
   dialog.id = 'quote-dialog';
   dialog.setAttribute('aria-labelledby', 'quote-dialog-title');
-  dialog.setAttribute('closedby', 'any'); // Mejora progresiva: cerrar al hacer clic fuera
+  dialog.setAttribute('closedby', 'any');
   dialog.innerHTML = `
     <form class="quote-form" novalidate>
       <header class="quote-dialog-header">
@@ -121,7 +160,7 @@ export function initQuote() {
         <button type="button" class="quote-dialog-close" aria-label="Cerrar">&times;</button>
       </header>
       <div class="quote-dialog-body">
-        <p class="quote-dialog-intro">Revisa los productos seleccionados, indica la cantidad y agrega las especificaciones que necesites (talla, color, medidas, bordado, etc.).</p>
+        <p class="quote-dialog-intro">Revisa los productos seleccionados, indica la cantidad, talla/color y agrega las especificaciones que necesites (medidas, bordado, etc.).</p>
         <ol class="quote-items"></ol>
         <div class="form-group">
           <label for="quote-general-notes">Observaciones generales <span class="optional">(opcional)</span></label>
@@ -148,13 +187,13 @@ export function initQuote() {
   dialog.querySelector('.quote-dialog-close').addEventListener('click', () => dialog.close());
   dialog.querySelector('.quote-dialog-cancel').addEventListener('click', () => dialog.close());
 
-  // Cerrar al hacer clic en el backdrop (área externa al diálogo)
   dialog.addEventListener('click', (e) => {
     const rect = dialog.getBoundingClientRect();
-    const isInDialog = (
-      rect.top <= e.clientY && e.clientY <= rect.top + rect.height &&
-      rect.left <= e.clientX && e.clientX <= rect.left + rect.width
-    );
+    const isInDialog =
+      rect.top <= e.clientY &&
+      e.clientY <= rect.top + rect.height &&
+      rect.left <= e.clientX &&
+      e.clientX <= rect.left + rect.width;
     if (!isInDialog) {
       dialog.close();
     }
@@ -176,6 +215,9 @@ export function initQuote() {
       const title = createEl('div', 'quote-item-title');
       title.append(createEl('strong', 'quote-item-name', item.name));
       if (item.category) title.append(' ', createEl('span', 'category', item.category));
+      if (item.unitPriceText) {
+        title.append(' ', createEl('span', 'quote-item-price-tag', item.unitPriceText));
+      }
 
       const remove = createEl('button', 'quote-item-remove', 'Quitar');
       remove.type = 'button';
@@ -187,28 +229,80 @@ export function initQuote() {
         if (selected.size === 0) {
           dialog.close();
         } else {
-          // Mantener el foco dentro del diálogo
           list.querySelector('.quote-item-remove')?.focus();
         }
       });
       head.append(title, remove);
 
+      // Selectores rápidos de Talla y Color si el producto los tiene configurados
+      let variantsRow = null;
+      if (item.sizes.length > 0 || item.colors.length > 0) {
+        variantsRow = createEl('div', 'quote-item-variants');
+        if (item.sizes.length > 0) {
+          const sizeGroup = createEl('div', 'form-group');
+          const sizeLbl = createEl('label', '', 'Talla');
+          sizeLbl.htmlFor = `quote-size-${id}`;
+          const sizeSelect = document.createElement('select');
+          sizeSelect.id = `quote-size-${id}`;
+          const multiOpt = document.createElement('option');
+          multiOpt.value = 'Varias tallas (detallar abajo)';
+          multiOpt.textContent = 'Varias tallas (detallar)';
+          item.sizes.forEach((sz) => {
+            const opt = document.createElement('option');
+            opt.value = sz;
+            opt.textContent = `Talla ${sz}`;
+            if (sz === item.chosenSize) opt.selected = true;
+            sizeSelect.appendChild(opt);
+          });
+          sizeSelect.appendChild(multiOpt);
+          sizeSelect.addEventListener('change', () => {
+            item.chosenSize = sizeSelect.value;
+          });
+          sizeGroup.append(sizeLbl, sizeSelect);
+          variantsRow.appendChild(sizeGroup);
+        }
+
+        if (item.colors.length > 0) {
+          const colorGroup = createEl('div', 'form-group');
+          const colorLbl = createEl('label', '', 'Color');
+          colorLbl.htmlFor = `quote-color-${id}`;
+          const colorSelect = document.createElement('select');
+          colorSelect.id = `quote-color-${id}`;
+          item.colors.forEach((col) => {
+            const opt = document.createElement('option');
+            opt.value = col;
+            opt.textContent = col;
+            if (col === item.chosenColor) opt.selected = true;
+            colorSelect.appendChild(opt);
+          });
+          colorSelect.addEventListener('change', () => {
+            item.chosenColor = colorSelect.value;
+          });
+          colorGroup.append(colorLbl, colorSelect);
+          variantsRow.appendChild(colorGroup);
+        }
+      }
+
       const fields = createEl('div', 'quote-item-fields');
 
       const qtyGroup = createEl('div', 'form-group quote-qty');
-      const qtyLabel = createEl('label', '', 'Cantidad');
+      const qtyLabel = createEl(
+        'label',
+        '',
+        item.minQty > 1 ? `Cantidad (mín. ${item.minQty})` : 'Cantidad'
+      );
       qtyLabel.htmlFor = `quote-qty-${id}`;
       const qty = document.createElement('input');
       qty.type = 'number';
       qty.id = `quote-qty-${id}`;
-      qty.min = '1';
+      qty.min = String(item.minQty);
       qty.step = '1';
       qty.inputMode = 'numeric';
       qty.required = true;
       qty.value = String(item.qty);
       qty.addEventListener('input', () => {
         const value = parseInt(qty.value, 10);
-        item.qty = Number.isFinite(value) && value > 0 ? value : 1;
+        item.qty = Number.isFinite(value) && value >= item.minQty ? value : item.minQty;
       });
       qtyGroup.append(qtyLabel, qty);
 
@@ -219,13 +313,17 @@ export function initQuote() {
       const note = document.createElement('textarea');
       note.id = `quote-note-${id}`;
       note.rows = 2;
-      note.placeholder = 'Talla, color, medidas, bordado, modelo...';
+      note.placeholder = 'Desglose de tallas, medidas, bordado institucional...';
       note.value = item.note;
-      note.addEventListener('input', () => { item.note = note.value; });
+      note.addEventListener('input', () => {
+        item.note = note.value;
+      });
       noteGroup.append(noteLabel, note);
 
       fields.append(qtyGroup, noteGroup);
-      li.append(head, fields);
+      li.append(head);
+      if (variantsRow) li.appendChild(variantsRow);
+      li.appendChild(fields);
       list.appendChild(li);
     });
   }
@@ -255,6 +353,9 @@ function buildMessage(selected, generalNotes, customer) {
   selected.forEach((item) => {
     lines.push(`${n}. *${item.name}*${item.category ? ` (${item.category})` : ''}`);
     lines.push(`   Cantidad: ${item.qty}`);
+    if (item.unitPriceText) lines.push(`   Precio ref.: ${item.unitPriceText} c/u`);
+    if (item.chosenSize) lines.push(`   Talla: ${item.chosenSize}`);
+    if (item.chosenColor) lines.push(`   Color: ${item.chosenColor}`);
     const note = item.note.trim();
     if (note) lines.push(`   Especificaciones: ${note.replace(/\s*\n\s*/g, '; ')}`);
     lines.push('');

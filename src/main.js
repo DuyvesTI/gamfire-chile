@@ -7,7 +7,10 @@ import { initWhatsAppWidget } from './components/WhatsAppWidget.js';
 
 initNavigation();
 initFooter();
-initCatalog();
-initQuote();
 initContactForm();
 initWhatsAppWidget();
+
+// Inicializar catálogo dinámico primero y luego vincular la selección de cotización
+initCatalog().then(() => {
+  initQuote();
+});
