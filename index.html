@@ -4,57 +4,202 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- @head -->
-  <title>Gamfire Chile | Equipamiento de Bomberos</title>
+  <!-- @head -->
+  <title>GAM Chile | Ropa Corporativa, Fire y Seven</title>
   <meta name="description"
-    content="Venta de equipamiento profesional para bomberos y servicios de emergencia en Chile.">
+    content="Confección nacional de ropa corporativa, indumentaria Fire de emergencia con insumos certificados (NFPA 2112, ASTM F1506, EN 15614), línea Seven y accesorios en Chile.">
 </head>
 
 <body>
-    <!-- @header -->
+  <!-- @header -->
   <div id="app">
     <main id="main-content">
-      <!-- Hero Section with Parallax -->
-      <section class="hero">
-        <div class="hero-bg" aria-hidden="true"></div>
-        <div class="hero-overlay"></div>
-        <div class="container hero-content">
-          <h1>Bienvenidos a Tienda GAM, <br>Compromiso con la Vida</h1>
-          <p>En donde nos dedicamos a la confección de uniformes, ropa de trabajo, overoles y prendas Institucionales.
-          </p>
-          <a href="catalogo.html" class="btn btn-primary">Ver Catálogo</a>
+      <!-- 1. HERO CON CARRUSEL ESTILO WORKING APPAREL -->
+      <section class="wa-hero-carousel" data-hero-carousel aria-label="Líneas destacadas GAM Chile">
+        <div class="wa-hero-bg" aria-hidden="true"></div>
+
+        <div class="wa-carousel-stage">
+          <button type="button" class="wa-carousel-nav prev" data-carousel-prev aria-label="Anterior" hidden>
+            <span>ATRÁS</span>
+          </button>
+
+          <div class="wa-carousel-viewport"></div>
+
+          <button type="button" class="wa-carousel-nav next" data-carousel-next aria-label="Siguiente" hidden>
+            <span>SIGUIENTE</span>
+          </button>
+        </div>
+
+        <!-- Indicadores del carrusel -->
+        <div class="wa-carousel-dots" role="tablist" aria-label="Diapositivas del carrusel" hidden></div>
+
+        <!-- Franja Negra de Certificación + CTA Naranja -->
+        <div class="wa-hero-cert-strip">
+          <div class="container wa-cert-strip-inner">
+            <img src="/logo-gam.png" alt="Logo GAM Chile" class="wa-cert-logo" width="54" height="54">
+            <p class="wa-cert-text">CONFECCIÓN NACIONAL CON PROVEEDORES E INSUMOS CERTIFICADOS</p>
+            <div class="wa-cert-seal">
+              <span class="wa-cert-seal-main">NORMATIVAS</span>
+              <span class="wa-cert-seal-sub">NFPA 2112 • ASTM F1506 • EN 15614</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="wa-hero-cta-wrap">
+          <a href="catalogo.html" class="wa-btn-orange" data-carousel-cta>EXPLORAR CATÁLOGO COMPLETO</a>
         </div>
       </section>
 
-      <!-- Featured Section -->
-      <section class="featured py-xl">
+      <!-- 2. SECCIÓN INTRODUCTORIA: FABRICAMOS ROPA CORPORATIVA Y DE EMERGENCIA -->
+      <section class="wa-intro-banner">
         <div class="container">
-          <h2 class="text-center section-title">Productos Destacados</h2>
-          <div class="featured-grid" id="featured-products">
-            <div class="product-card">
-              <div class="product-img-placeholder" role="img" aria-label="Uniforme Rescate USAR-GERSA" style="background-image: url('uploads/uniforme-rescate-usar-gersa.jpg');"></div>
-              <h3>Uniforme Rescate USAR-GERSA</h3>
-              <p>Informes Rescate GERSA Bomberos, personalizados. Tallas disponibles S a 4XL, colores a elección.</p>
-              <a href="catalogo.html" class="btn btn-dark-outline">Ver en catálogo</a>
+          <h1 class="wa-bicolor-title">
+            FABRICAMOS <span>ROPA CORPORATIVA Y DE EMERGENCIA</span>
+          </h1>
+          <p class="wa-intro-paragraph">
+            En <strong>GAM CHILE</strong>, nuestro compromiso es proporcionar soluciones de <strong>Ropa Corporativa, Indumentaria Fire de Emergencia, Línea Seven y Accesorios</strong> de alta calidad, destacando que nuestra <strong>confección es 100% nacional</strong>. Trabajamos con <strong>proveedores e insumos certificados</strong> para labores relacionadas con emergencias y alta exigencia (<strong>ASTM F1506</strong> o <strong>EN 15614</strong>, <strong>NFPA 2112</strong>, según corresponda), junto con cierres YKK y cintas reflectantes 3M, garantizando durabilidad, protección y funcionalidad que reflejan la identidad de tu institución o empresa. Además, ofrecemos atención personalizada y confección por volumen con despachos a todo Chile.
+          </p>
+        </div>
+      </section>
+
+      <!-- 3. SECCIÓN LAS 4 DIVISIONES: CORPORATIVA - FIRE - SEVEN - ACCESORIOS -->
+      <section class="wa-divisions-section py-xl">
+        <div class="container">
+          <div class="section-header text-center">
+            <h2 class="wa-section-heading">NUESTRAS <span>DIVISIONES</span></h2>
+            <p class="section-subtitle">Explora nuestras líneas especializadas de confección nacional.</p>
+          </div>
+
+          <div class="wa-divisions-grid">
+            <a href="catalogo.html?categoria=corporativa" class="wa-division-card" data-division-card="corporativa">
+              <div class="wa-division-bg" style="background-image: url('uploads/division-corporativa.jpg');"></div>
+              <div class="wa-division-overlay"></div>
+              <div class="wa-division-content">
+                <span class="wa-division-tag">DIVISIÓN</span>
+                <h3>CORPORATIVA</h3>
+                <p>Camisas Oxford, blusas, chaquetas con pala, pantalones de cuartel, uniformes de parada y prendas corporativas personalizadas.</p>
+                <span class="wa-division-cta">Ver Catálogo Corporativa ➔</span>
+              </div>
+            </a>
+
+            <a href="catalogo.html?categoria=fire" class="wa-division-card" data-division-card="fire">
+              <div class="wa-division-bg" style="background-image: url('uploads/division-fire.jpg');"></div>
+              <div class="wa-division-overlay"></div>
+              <div class="wa-division-content">
+                <span class="wa-division-tag">DIVISIÓN</span>
+                <h3>FIRE</h3>
+                <p>Uniformes Multirol antillama, rescate USAR-GERSA, agreste RS 270, camisas ignífugas y diseño Rosenbauer / GRIMP con insumos certificados.</p>
+                <span class="wa-division-cta">Ver Catálogo Fire ➔</span>
+              </div>
+            </a>
+
+            <a href="catalogo.html?categoria=seven" class="wa-division-card" data-division-card="seven">
+              <div class="wa-division-bg" style="background-image: url('uploads/division-seven.jpg');"></div>
+              <div class="wa-division-overlay"></div>
+              <div class="wa-division-content">
+                <span class="wa-division-tag">DIVISIÓN</span>
+                <h3>SEVEN</h3>
+                <p>Línea especializada SEVEN de GAM Chile. Prendas técnicas, versátiles y de alto rendimiento listas para personalizar para tu equipo.</p>
+                <span class="wa-division-cta">Ver Catálogo Seven ➔</span>
+              </div>
+            </a>
+
+            <a href="catalogo.html?categoria=accesorios" class="wa-division-card" data-division-card="accesorios">
+              <div class="wa-division-bg" style="background-image: url('uploads/division-accesorios.jpg');"></div>
+              <div class="wa-division-overlay"></div>
+              <div class="wa-division-content">
+                <span class="wa-division-tag">DIVISIÓN</span>
+                <h3>ACCESORIOS</h3>
+                <p>Jockeys y gorros bordados, mochilas, equipamiento de guardia nocturna (cobertores y sábanas con reflectante) y souvenirs 3D.</p>
+                <span class="wa-division-cta">Ver Catálogo Accesorios ➔</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. SECCIÓN ¿POR QUÉ ELEGIRNOS? (Con los 4 pilares de GAM Chile) -->
+      <section class="wa-why-us-section py-xl">
+        <div class="container text-center">
+          <div class="wa-brand-display">
+            <span class="wa-brand-first">GAM</span> <span class="wa-brand-second">CHILE</span>
+          </div>
+          <h2 class="wa-why-subtitle">¿POR QUÉ <strong>ELEGIRNOS?</strong></h2>
+
+          <div class="wa-pillars-grid">
+            <!-- 1. Calidad (Escudo con check) -->
+            <div class="wa-pillar-item">
+              <div class="wa-pillar-icon" aria-hidden="true">
+                <svg viewBox="0 0 64 64" width="68" height="68" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M32 6L10 15v16c0 14.5 9.4 27.6 22 31 12.6-3.4 22-16.5 22-31V15L32 6z"/>
+                  <circle cx="32" cy="31" r="11"/>
+                  <path d="M27 31l3.5 3.5L37.5 27"/>
+                </svg>
+              </div>
+              <p class="wa-pillar-title">CONFECCIÓN DE <strong>CALIDAD</strong></p>
             </div>
-            <div class="product-card">
-              <div class="product-img-placeholder" role="img" aria-label="Uniforme Diseño Rosenbauer - Adulto y Niños" style="background-image: url('uploads/uniforme-diseno-rosenbauer-adulto-y-ninos.jpg');"></div>
-              <h3>Uniforme Diseño Rosenbauer - Adulto y Niños</h3>
-              <p>Uniformes estilo diseño Alemán Rosenbauer para Niños (BJ) y Adultos. Tallas desde 6 a 4XL.</p>
-              <a href="catalogo.html" class="btn btn-dark-outline">Ver en catálogo</a>
+
+            <!-- 2. Insumos Certificados (Medalla / Sello con estrella) -->
+            <div class="wa-pillar-item">
+              <div class="wa-pillar-icon" aria-hidden="true">
+                <svg viewBox="0 0 64 64" width="68" height="68" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="32" cy="24" r="16"/>
+                  <polygon points="32,14 34.9,20 41.5,20.9 36.7,25.5 37.9,32 32,28.9 26.1,32 27.3,25.5 22.5,20.9 29.1,20"/>
+                  <path d="M22 37l-6 20 10-5 6 7 6-7 10 5-6-20"/>
+                </svg>
+              </div>
+              <p class="wa-pillar-title">INSUMOS <strong>CERTIFICADOS</strong></p>
             </div>
-            <div class="product-card">
-              <div class="product-img-placeholder" role="img" aria-label="Uniforme Multirol / Antillama" style="background-image: url('uploads/uniforme-multirol-antillama.jpg');"></div>
-              <h3>Uniforme Multirol / Antillama</h3>
-              <p>Uniforme Multirol con insumos certificados, cierres YKK, cinta 3M y tela retardante a la llama.</p>
-              <a href="catalogo.html" class="btn btn-dark-outline">Ver en catálogo</a>
+
+            <!-- 3. Asesoramiento (Ejecutivo con headset) -->
+            <div class="wa-pillar-item">
+              <div class="wa-pillar-icon" aria-hidden="true">
+                <svg viewBox="0 0 64 64" width="68" height="68" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M16 28a16 16 0 0 1 32 0"/>
+                  <rect x="11" y="26" width="6" height="12" rx="3"/>
+                  <rect x="47" y="26" width="6" height="12" rx="3"/>
+                  <path d="M47 36c0 5-4 8-11 8h-4"/>
+                  <circle cx="32" cy="27" r="9"/>
+                  <path d="M16 56c2-9 8-13 16-13s14 4 16 13"/>
+                </svg>
+              </div>
+              <p class="wa-pillar-title">ASESORAMIENTO <strong>PERSONALIZADO</strong></p>
             </div>
+
+            <!-- 4. Envíos (Camión de despacho rápido) -->
+            <div class="wa-pillar-item">
+              <div class="wa-pillar-icon" aria-hidden="true">
+                <svg viewBox="0 0 64 64" width="68" height="68" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="10" y="18" width="28" height="24" rx="2"/>
+                  <path d="M38 24h11l7 9v9H38V24z"/>
+                  <circle cx="21" cy="46" r="5"/>
+                  <circle cx="47" cy="46" r="5"/>
+                  <line x1="2" y1="25" x2="7" y2="25"/>
+                  <line x1="4" y1="33" x2="7" y2="33"/>
+                </svg>
+              </div>
+              <p class="wa-pillar-title">ENVÍOS A <strong>TODO CHILE</strong></p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. PRODUCTOS DESTACADOS -->
+      <section class="featured py-xl section-alt-bg">
+        <div class="container">
+          <div class="section-header text-center">
+            <h2 class="wa-section-heading">PRODUCTOS <span>DESTACADOS</span></h2>
+            <p class="section-subtitle">Confección nacional a medida desde tallas infantiles hasta 6XL.</p>
+          </div>
+          <div class="featured-grid" id="featured-products"></div>
+          <div class="text-center" style="margin-top: 2.5rem;">
+            <a href="catalogo.html" class="wa-btn-orange">VER CATÁLOGO COMPLETO</a>
           </div>
         </div>
       </section>
     </main>
   </div>
-    <!-- @footer -->
+  <!-- @footer -->
   <script type="module" src="/src/main.js"></script>
 </body>
 

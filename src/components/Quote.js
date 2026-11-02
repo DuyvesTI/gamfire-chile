@@ -3,7 +3,13 @@
 // y enviar el resumen como mensaje de WhatsApp.
 import { formatCLP } from '../data/defaultCatalog.js';
 
-const WHATSAPP_NUMBER = '56979684064';
+let currentWhatsAppNumber = '56979684064';
+
+export function updateQuoteWhatsAppNumber(num) {
+  if (num) {
+    currentWhatsAppNumber = String(num).replace(/[^0-9]/g, '') || currentWhatsAppNumber;
+  }
+}
 
 export function initQuote() {
   const grid = document.getElementById('catalog-grid');
@@ -337,7 +343,7 @@ export function initQuote() {
     }
 
     const message = buildMessage(selected, generalNotes.value, customer.value);
-    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+    const url = `https://wa.me/${currentWhatsAppNumber}?text=${encodeURIComponent(message)}`;
     window.open(url, '_blank', 'noopener,noreferrer');
     dialog.close();
   });

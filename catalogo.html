@@ -2,52 +2,56 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- @head -->
-    <title>Catálogo | Gamfire Chile</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- @head -->
+  <title>Catálogo y Divisiones | GAM Chile</title>
 </head>
 
 <body>
-    <!-- @header -->
-    <div id="app">
-        <main id="main-content" class="page-content py-lg">
-            <div class="container">
-                <h1>Catálogo de Productos</h1>
+  <!-- @header -->
+  <div id="app">
+    <main id="main-content">
+      <!-- HERO DINÁMICO POR DIVISIÓN (Cambia según CORPORATIVA / FIRE / SEVEN / ACCESORIOS / TODOS) -->
+      <section class="division-hero" id="division-hero" data-theme="all">
+        <div class="division-hero-bg" id="division-hero-bg" style="background-image: url('/hero-banner.jpg');"></div>
+        <div class="division-hero-overlay"></div>
+        <div class="container division-hero-content">
+          <span class="division-hero-badge" id="division-hero-badge">CATÁLOGO GENERAL • GAM CHILE</span>
+          <h1 class="division-hero-title" id="division-hero-title">TODAS NUESTRAS <span>DIVISIONES</span></h1>
+          <p class="division-hero-desc" id="division-hero-desc">
+            Confección 100% nacional con proveedores e insumos certificados. Explora nuestras líneas Corporativa, Fire, Seven y Accesorios o selecciona los productos que deseas cotizar por WhatsApp.
+          </p>
+          <div class="division-hero-pills" id="division-hero-pills">
+            <span class="division-pill">✓ Confección 100% Nacional</span>
+            <span class="division-pill">✓ Insumos Certificados (3M / YKK)</span>
+            <span class="division-pill">✓ Tallas Niños (2) a Adultos (6XL)</span>
+            <span class="division-pill">✓ Envíos a Todo Chile</span>
+          </div>
+        </div>
+      </section>
 
-                <div class="catalog-controls" role="toolbar" aria-label="Filtro de productos">
-                    <button class="filter-btn btn active" data-filter="all" aria-pressed="true">Todos</button>
-                    <button class="filter-btn btn" data-filter="proteccion" aria-pressed="false">Protección</button>
-                    <button class="filter-btn btn" data-filter="ropa" aria-pressed="false">Ropa</button>
-                    <button class="filter-btn btn" data-filter="herramientas" aria-pressed="false">Herramientas</button>
-                    <button class="filter-btn btn" data-filter="accesorios" aria-pressed="false">Accesorios</button>
-                </div>
-
-                <div class="product-grid" id="catalog-grid">
-                    <div class="product-card" data-category="proteccion">
-                        <div class="product-img-placeholder" style="background-image: url('uploads/uniforme-rescate-usar-gersa.jpg');"></div>
-                        <h3>Uniforme Rescate USAR-GERSA</h3>
-                        <span class="category">Protección</span>
-                        <p>Uniformes Rescate GERSA Bomberos, personalizados. Tallas S a 4XL.</p>
-                    </div>
-                    <div class="product-card" data-category="ropa">
-                        <div class="product-img-placeholder" style="background-image: url('uploads/chaqueta-comandante-bomberos.jpg');"></div>
-                        <h3>Chaqueta Comandante Bomberos</h3>
-                        <span class="category">Ropa</span>
-                        <p>Chaqueta impermeable antifluido con bordado reflectante.</p>
-                    </div>
-                    <div class="product-card" data-category="proteccion">
-                        <div class="product-img-placeholder" style="background-image: url('uploads/uniforme-diseno-rosenbauer-adulto-y-ninos.jpg');"></div>
-                        <h3>Uniforme Diseño Rosenbauer - Adulto y Niños</h3>
-                        <span class="category">Protección</span>
-                        <p>Uniformes estilo diseño Alemán Rosenbauer en tallas de Niños y Adultos.</p>
-                    </div>
-                </div>
+      <!-- CONTROLES Y GRILLA DE PRODUCTOS DE LA SECCIÓN -->
+      <section class="page-content py-lg">
+        <div class="container">
+          <div class="division-catalog-bar">
+            <div class="catalog-controls" role="toolbar" aria-label="Filtro por división">
+              <button class="filter-btn btn active" data-filter="all" aria-pressed="true">Todos los Productos</button>
+              <button class="filter-btn btn" data-filter="corporativa" aria-pressed="false">División Corporativa</button>
+              <button class="filter-btn btn" data-filter="fire" aria-pressed="false">División Fire</button>
+              <button class="filter-btn btn" data-filter="seven" aria-pressed="false">División Seven</button>
+              <button class="filter-btn btn" data-filter="accesorios" aria-pressed="false">División Accesorios</button>
             </div>
-        </main>
-    </div>
-    <!-- @footer -->
-    <script type="module" src="/src/main.js"></script>
+            <p class="division-results-count" id="division-results-count"></p>
+          </div>
+
+          <div class="product-grid" id="catalog-grid"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <!-- @footer -->
+  <script type="module" src="/src/main.js"></script>
 </body>
 
 </html>

@@ -1,9 +1,11 @@
 // Servicio API con soporte para servidor real (Node/PHP) y respaldo cifrado local
 // para pruebas estáticas sin servidor (p.ej. GitHub Pages / vista previa estática).
-import { DEFAULT_PRODUCTS } from '../data/defaultCatalog.js';
+import { DEFAULT_PRODUCTS, DEFAULT_BANNERS, DEFAULT_SITE_CONTENT, normalizeCategoryId } from '../data/defaultCatalog.js';
 
 const TOKEN_KEY = 'gamfire_auth_token';
-const LOCAL_PRODUCTS_KEY = 'gamfire_catalog_products_v2';
+const LOCAL_PRODUCTS_KEY = 'gamfire_catalog_products_v4';
+const LOCAL_BANNERS_KEY = 'gamfire_carousel_banners_v1';
+const LOCAL_CONTENT_KEY = 'gamfire_site_content_v1';
 const LOCAL_USERS_KEY = 'gamfire_catalog_users_v1';
 
 const RAW_BASE = import.meta.env?.BASE_URL || './';
@@ -49,6 +51,7 @@ async function ensureLocalUsers() {
       name: 'Administrador General',
       email: 'admin@gamfire.cl',
       role: 'admin',
+      permissions: ['catalog', 'banners', 'content', 'users'],
       salt: adminSalt,
       passwordHash: await sha256Hex(`${adminSalt}:Gamfire2026!`),
       active: true,
@@ -59,7 +62,8 @@ async function ensureLocalUsers() {
       username: 'catalogo',
       name: 'Encargado de Catálogo',
       email: 'catalogo@gamfire.cl',
-      role: 'catalogo',
+      role: 'custom',
+      permissions: ['catalog'],
       salt: catSalt,
       passwordHash: await sha256Hex(`${catSalt}:Catalogo2026!`),
       active: true,
@@ -75,7 +79,12 @@ function getLocalProducts() {
   if (raw) {
     try {
       const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed)) return parsed;
+      if (Array.isArray(parsed)) {
+        return parsed.map((p) => ({
+          ...p,
+          category: normalizeCategoryId(p.category),
+        }));
+      }
     } catch {
       // ignore
     }
@@ -86,6 +95,53 @@ function getLocalProducts() {
 
 function saveLocalProducts(list) {
   localStorage.setItem(LOCAL_PRODUCTS_KEY, JSON.stringify(list));
+}
+
+export function getCachedActiveProducts() {
+  const raw = localStorage.getItem(LOCAL_PRODUCTS_KEY);
+  if (!raw) return null;
+  try {
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return null;
+    return parsed
+      .filter((p) => p.active !== false)
+      .map((p) => ({
+        ...p,
+        category: normalizeCategoryId(p.category),
+      }));
+  } catch {
+    return null;
+  }
+}
+
+function getLocalBanners() {
+  const raw = localStorage.getItem(LOCAL_BANNERS_KEY);
+  if (raw) {
+    try {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) return parsed;
+    } catch {
+      // ignore
+    }
+  }
+  localStorage.setItem(LOCAL_BANNERS_KEY, JSON.stringify(DEFAULT_BANNERS));
+  return [...DEFAULT_BANNERS];
+}
+
+function saveLocalBanners(list) {
+  localStorage.setItem(LOCAL_BANNERS_KEY, JSON.stringify(list));
+}
+
+export function getCachedActiveBanners() {
+  const raw = localStorage.getItem(LOCAL_BANNERS_KEY);
+  if (!raw) return [...DEFAULT_BANNERS];
+  try {
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return [...DEFAULT_BANNERS];
+    return parsed.filter((b) => b.active !== false);
+  } catch {
+    return [...DEFAULT_BANNERS];
+  }
 }
 
 async function tryApiFetch(endpoint, options = {}) {
@@ -183,6 +239,9 @@ export async function getCurrentUser() {
           name: found.name,
           email: found.email,
           role: found.role,
+          permissions: found.role === 'admin'
+            ? ['catalog', 'banners', 'content', 'users']
+            : (Array.isArray(found.permissions) && found.permissions.length > 0 ? found.permissions : ['catalog']),
         };
       } catch {
         setAuthToken('');
@@ -285,6 +344,160 @@ export async function uploadProductImage(dataUrl) {
 }
 
 // ==========================================================
+// BANNERS / PROPAGANDA DEL CARRUSEL PRINCIPAL
+// ==========================================================
+export async function fetchBanners({ includeInactive = false } = {}) {
+  try {
+    const query = includeInactive ? '?all=1' : '';
+    const data = await tryApiFetch(`/banners${query}`);
+    if (Array.isArray(data.banners)) {
+      if (!includeInactive) {
+        saveLocalBanners(data.banners);
+      }
+      return data.banners;
+    }
+  } catch {
+    // Fallback a almacenamiento local o banners por defecto
+  }
+  const local = getLocalBanners();
+  return includeInactive ? local : local.filter((b) => b.active !== false);
+}
+
+export async function createBanner(bannerData) {
+  try {
+    const data = await tryApiFetch('/banners', {
+      method: 'POST',
+      body: JSON.stringify(bannerData),
+    });
+    return data.banner;
+  } catch (err) {
+    if (err.status) throw err;
+    const list = getLocalBanners();
+    const newBanner = {
+      ...bannerData,
+      id: `banner-${Date.now().toString(36)}`,
+      updatedAt: new Date().toISOString(),
+    };
+    list.push(newBanner);
+    saveLocalBanners(list);
+    return newBanner;
+  }
+}
+
+export async function updateBanner(id, bannerData) {
+  try {
+    const data = await tryApiFetch(`/banners/${encodeURIComponent(id)}`, {
+      method: 'PUT',
+      body: JSON.stringify(bannerData),
+    });
+    return data.banner;
+  } catch (err) {
+    if (err.status) throw err;
+    const list = getLocalBanners();
+    const idx = list.findIndex((b) => b.id === id);
+    if (idx === -1) throw new Error('Banner no encontrado.');
+    const updated = { ...list[idx], ...bannerData, id, updatedAt: new Date().toISOString() };
+    list[idx] = updated;
+    saveLocalBanners(list);
+    return updated;
+  }
+}
+
+export async function deleteBanner(id) {
+  try {
+    await tryApiFetch(`/banners/${encodeURIComponent(id)}`, {
+      method: 'DELETE',
+    });
+    return true;
+  } catch (err) {
+    if (err.status) throw err;
+    const list = getLocalBanners().filter((b) => b.id !== id);
+    saveLocalBanners(list);
+    return true;
+  }
+}
+
+// ==========================================================
+// TEXTOS PRINCIPALES DE LA WEB Y BANNERS DE CATÁLOGO
+// ==========================================================
+function mergeSiteContentWithDefaults(raw = {}) {
+  const siteLayoutMode = raw?.siteLayoutMode === 'onepage' ? 'onepage' : 'multipage';
+  const contact = {
+    ...DEFAULT_SITE_CONTENT.contact,
+    ...(raw?.contact || {}),
+  };
+  const intro = {
+    ...DEFAULT_SITE_CONTENT.intro,
+    ...(raw?.intro || {}),
+  };
+  const empresa = {
+    ...DEFAULT_SITE_CONTENT.empresa,
+    ...(raw?.empresa || {}),
+  };
+  const catalogBanners = {};
+  ['all', 'corporativa', 'fire', 'seven', 'accesorios'].forEach((key) => {
+    const def = DEFAULT_SITE_CONTENT.catalogBanners[key];
+    const src = raw?.catalogBanners?.[key] || {};
+    const pills = Array.isArray(src.pills)
+      ? src.pills
+      : typeof src.pills === 'string'
+        ? src.pills.split(',').map((s) => s.trim()).filter(Boolean)
+        : [...def.pills];
+    catalogBanners[key] = {
+      ...def,
+      ...src,
+      pills,
+    };
+  });
+  return { siteLayoutMode, contact, intro, empresa, catalogBanners };
+}
+
+export function getCachedSiteContent() {
+  const raw = localStorage.getItem(LOCAL_CONTENT_KEY);
+  if (!raw) return mergeSiteContentWithDefaults(DEFAULT_SITE_CONTENT);
+  try {
+    return mergeSiteContentWithDefaults(JSON.parse(raw));
+  } catch {
+    return mergeSiteContentWithDefaults(DEFAULT_SITE_CONTENT);
+  }
+}
+
+function saveLocalSiteContent(content) {
+  localStorage.setItem(LOCAL_CONTENT_KEY, JSON.stringify(content));
+}
+
+export async function fetchSiteContent() {
+  try {
+    const data = await tryApiFetch('/content');
+    if (data && data.content && typeof data.content === 'object') {
+      const merged = mergeSiteContentWithDefaults(data.content);
+      saveLocalSiteContent(merged);
+      return merged;
+    }
+  } catch {
+    // Fallback a almacenamiento local o textos por defecto
+  }
+  return getCachedSiteContent();
+}
+
+export async function updateSiteContent(contentData) {
+  const mergedPayload = mergeSiteContentWithDefaults(contentData);
+  try {
+    const data = await tryApiFetch('/content', {
+      method: 'PUT',
+      body: JSON.stringify(mergedPayload),
+    });
+    const saved = mergeSiteContentWithDefaults(data.content || mergedPayload);
+    saveLocalSiteContent(saved);
+    return saved;
+  } catch (err) {
+    if (err.status) throw err;
+    saveLocalSiteContent(mergedPayload);
+    return mergedPayload;
+  }
+}
+
+// ==========================================================
 // GESTIÓN DE USUARIOS (Solo Rol 'admin')
 // ==========================================================
 export async function fetchUsers() {
@@ -313,12 +526,24 @@ export async function createUser(userData) {
       throw new Error('Ese nombre de usuario ya existe.');
     }
     const salt = `gf-salt-${Date.now().toString(36)}`;
+    const role = userData.role === 'admin' ? 'admin' : 'custom';
+    let permissions = [];
+    if (role === 'admin') {
+      permissions = ['catalog', 'banners', 'content', 'users'];
+    } else if (Array.isArray(userData.permissions)) {
+      permissions = userData.permissions.filter((p) => ['catalog', 'banners', 'content', 'users'].includes(p));
+      if (permissions.length === 0) permissions = ['catalog'];
+    } else {
+      permissions = ['catalog'];
+    }
+
     const newU = {
       id: `usr-${Date.now().toString(36)}`,
       username,
       name: userData.name,
       email: userData.email || '',
-      role: userData.role === 'admin' ? 'admin' : 'catalogo',
+      role,
+      permissions,
       salt,
       passwordHash: await sha256Hex(`${salt}:${userData.password}`),
       active: true,
@@ -346,7 +571,16 @@ export async function updateUser(id, userData) {
     const target = users[idx];
     target.name = userData.name || target.name;
     target.email = userData.email ?? target.email;
-    if (userData.role) target.role = userData.role;
+    if (userData.role) {
+      target.role = userData.role === 'admin' ? 'admin' : 'custom';
+      if (target.role === 'admin') {
+        target.permissions = ['catalog', 'banners', 'content', 'users'];
+      }
+    }
+    if (Array.isArray(userData.permissions) && target.role !== 'admin') {
+      const perms = userData.permissions.filter((p) => ['catalog', 'banners', 'content', 'users'].includes(p));
+      target.permissions = perms.length > 0 ? perms : ['catalog'];
+    }
     if (userData.active !== undefined) target.active = Boolean(userData.active);
     if (userData.password) {
       const salt = `gf-salt-${Date.now().toString(36)}`;

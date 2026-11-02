@@ -4,10 +4,12 @@
 import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
-import { DEFAULT_PRODUCTS } from '../src/data/defaultCatalog.js';
+import { DEFAULT_PRODUCTS, DEFAULT_BANNERS, DEFAULT_SITE_CONTENT } from '../src/data/defaultCatalog.js';
 
 const DATA_DIR = path.resolve(process.cwd(), 'server-data');
 const PRODUCTS_FILE = path.join(DATA_DIR, 'products.json');
+const BANNERS_FILE = path.join(DATA_DIR, 'banners.json');
+const CONTENT_FILE = path.join(DATA_DIR, 'site-content.json');
 const USERS_FILE = path.join(DATA_DIR, 'users.json');
 const SECRET_FILE = path.join(DATA_DIR, '.jwt_secret');
 const UPLOADS_DIR = path.resolve(process.cwd(), 'public', 'uploads');
@@ -27,6 +29,14 @@ function ensureStorage() {
 
   if (!fs.existsSync(PRODUCTS_FILE)) {
     fs.writeFileSync(PRODUCTS_FILE, JSON.stringify(DEFAULT_PRODUCTS, null, 2), 'utf-8');
+  }
+
+  if (!fs.existsSync(BANNERS_FILE)) {
+    fs.writeFileSync(BANNERS_FILE, JSON.stringify(DEFAULT_BANNERS, null, 2), 'utf-8');
+  }
+
+  if (!fs.existsSync(CONTENT_FILE)) {
+    fs.writeFileSync(CONTENT_FILE, JSON.stringify(DEFAULT_SITE_CONTENT, null, 2), 'utf-8');
   }
 
   if (!fs.existsSync(USERS_FILE)) {
@@ -135,14 +145,14 @@ function sendJson(res, status, data) {
   res.end(JSON.stringify(data));
 }
 
-function parseBody(req, maxBytes = 6 * 1024 * 1024) {
+function parseBody(req, maxBytes = 18 * 1024 * 1024) {
   return new Promise((resolve, reject) => {
     let raw = '';
     let bytes = 0;
     req.on('data', (chunk) => {
       bytes += chunk.length;
       if (bytes > maxBytes) {
-        reject(new Error('Payload demasiado grande (máx 6MB)'));
+        reject(new Error('Payload demasiado grande (máx 18MB)'));
         req.destroy();
         return;
       }
@@ -176,16 +186,31 @@ function getAuthUser(req) {
     name: user.name,
     email: user.email,
     role: user.role,
+    permissions: user.role === 'admin'
+      ? ['catalog', 'banners', 'content', 'users']
+      : (Array.isArray(user.permissions) && user.permissions.length > 0 ? user.permissions : ['catalog']),
   };
 }
 
 function sanitizeUser(u) {
+  const role = u.role === 'admin' ? 'admin' : (u.role || 'catalogo');
+  let permissions = [];
+  if (role === 'admin') {
+    permissions = ['catalog', 'banners', 'content', 'users'];
+  } else if (Array.isArray(u.permissions)) {
+    permissions = u.permissions.filter((p) => ['catalog', 'banners', 'content', 'users'].includes(p));
+    if (permissions.length === 0) permissions = ['catalog'];
+  } else {
+    permissions = ['catalog'];
+  }
+
   return {
     id: u.id,
     username: u.username,
     name: u.name,
     email: u.email,
-    role: u.role,
+    role,
+    permissions,
     active: u.active !== false,
     createdAt: u.createdAt,
   };
@@ -203,9 +228,9 @@ function sanitizeProduct(input, existingId = null) {
     .replace(/^-+|-+$/g, '');
 
   const id = existingId || String(input.id || '').trim() || `${slug}-${Date.now().toString(36)}`;
-  const category = ['proteccion', 'ropa', 'herramientas', 'accesorios'].includes(input.category)
-    ? input.category
-    : 'proteccion';
+  const allowedCategories = ['corporativa', 'fire', 'seven', 'accesorios', 'proteccion', 'ropa', 'herramientas'];
+  const rawCat = allowedCategories.includes(input.category) ? input.category : 'fire';
+  const category = rawCat === 'ropa' ? 'corporativa' : (rawCat === 'proteccion' || rawCat === 'herramientas') ? 'fire' : rawCat;
 
   const normalPrice =
     input.normalPrice !== null && input.normalPrice !== '' && Number(input.normalPrice) > 0
@@ -243,6 +268,113 @@ function sanitizeProduct(input, existingId = null) {
     minOrderQty,
     featured: Boolean(input.featured),
     active: input.active !== false,
+    updatedAt: new Date().toISOString(),
+  };
+}
+
+function sanitizeBanner(input, existingId = null) {
+  const title = String(input.title || '').trim();
+  const layoutAllowed = ['split', 'vignette', 'bottom-bar', 'showcase', 'clean'];
+  const layout = layoutAllowed.includes(input.layout) ? input.layout : 'vignette';
+  if (!title && layout !== 'clean') {
+    throw new Error('El título del banner publicitario es obligatorio.');
+  }
+
+  const slug = (title || 'banner')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
+  const id = existingId || String(input.id || '').trim() || `banner-${slug}-${Date.now().toString(36)}`;
+
+  const productIds = Array.isArray(input.productIds)
+    ? input.productIds.map((item) => String(item).trim()).filter(Boolean).slice(0, 6)
+    : [];
+
+  return {
+    id,
+    title,
+    highlight: String(input.highlight || '').trim(),
+    titleRight: String(input.titleRight || '').trim(),
+    highlightRight: String(input.highlightRight || '').trim(),
+    badge: String(input.badge || '').trim(),
+    subtitle: String(input.subtitle || '').trim(),
+    layout,
+    productIds,
+    posterImage: String(input.posterImage || input.poster || '').trim(),
+    videoUrl: String(input.videoUrl || input.video || '').trim(),
+    ctaText: String(input.ctaText || 'CONOCE MÁS AQUÍ').trim(),
+    ctaLink: String(input.ctaLink || 'catalogo.html').trim(),
+    active: input.active !== false,
+    updatedAt: new Date().toISOString(),
+  };
+}
+
+function sanitizeSiteContent(input = {}) {
+  const siteLayoutMode = input.siteLayoutMode === 'onepage' ? 'onepage' : 'multipage';
+  const rawContact = input.contact || {};
+  const rawIntro = input.intro || {};
+  const rawEmpresa = input.empresa || {};
+  const rawCatBanners = input.catalogBanners || {};
+
+  const contact = {
+    whatsappNumber: String(rawContact.whatsappNumber ?? DEFAULT_SITE_CONTENT.contact.whatsappNumber).trim(),
+    whatsappUrl: String(rawContact.whatsappUrl ?? DEFAULT_SITE_CONTENT.contact.whatsappUrl).trim(),
+    facebookName: String(rawContact.facebookName ?? DEFAULT_SITE_CONTENT.contact.facebookName).trim(),
+    facebookUrl: String(rawContact.facebookUrl ?? DEFAULT_SITE_CONTENT.contact.facebookUrl).trim(),
+    instagramHandle: String(rawContact.instagramHandle ?? DEFAULT_SITE_CONTENT.contact.instagramHandle).trim(),
+    instagramUrl: String(rawContact.instagramUrl ?? DEFAULT_SITE_CONTENT.contact.instagramUrl).trim(),
+    email: String(rawContact.email ?? DEFAULT_SITE_CONTENT.contact.email).trim(),
+  };
+
+  const intro = {
+    titleMain: String(rawIntro.titleMain ?? DEFAULT_SITE_CONTENT.intro.titleMain).trim(),
+    titleHighlight: String(rawIntro.titleHighlight ?? DEFAULT_SITE_CONTENT.intro.titleHighlight).trim(),
+    paragraph: String(rawIntro.paragraph ?? DEFAULT_SITE_CONTENT.intro.paragraph).trim(),
+  };
+
+  const empresa = {
+    titleMain: String(rawEmpresa.titleMain ?? DEFAULT_SITE_CONTENT.empresa.titleMain).trim(),
+    titleHighlight: String(rawEmpresa.titleHighlight ?? DEFAULT_SITE_CONTENT.empresa.titleHighlight).trim(),
+    paragraph1: String(rawEmpresa.paragraph1 ?? DEFAULT_SITE_CONTENT.empresa.paragraph1).trim(),
+    paragraph2: String(rawEmpresa.paragraph2 ?? DEFAULT_SITE_CONTENT.empresa.paragraph2).trim(),
+    paragraph3: String(rawEmpresa.paragraph3 ?? DEFAULT_SITE_CONTENT.empresa.paragraph3).trim(),
+    motto: String(rawEmpresa.motto ?? DEFAULT_SITE_CONTENT.empresa.motto).trim(),
+    misionTitle: String(rawEmpresa.misionTitle ?? DEFAULT_SITE_CONTENT.empresa.misionTitle).trim(),
+    misionText: String(rawEmpresa.misionText ?? DEFAULT_SITE_CONTENT.empresa.misionText).trim(),
+    visionTitle: String(rawEmpresa.visionTitle ?? DEFAULT_SITE_CONTENT.empresa.visionTitle).trim(),
+    visionText: String(rawEmpresa.visionText ?? DEFAULT_SITE_CONTENT.empresa.visionText).trim(),
+  };
+
+  const bannerKeys = ['all', 'corporativa', 'fire', 'seven', 'accesorios'];
+  const catalogBanners = {};
+  bannerKeys.forEach((key) => {
+    const def = DEFAULT_SITE_CONTENT.catalogBanners[key];
+    const src = rawCatBanners[key] || {};
+    const pills = Array.isArray(src.pills)
+      ? src.pills.map((p) => String(p).trim()).filter(Boolean)
+      : typeof src.pills === 'string'
+        ? src.pills.split(',').map((p) => p.trim()).filter(Boolean)
+        : [...def.pills];
+    catalogBanners[key] = {
+      badge: String(src.badge ?? def.badge).trim(),
+      titleMain: String(src.titleMain ?? def.titleMain).trim(),
+      titleHighlight: String(src.titleHighlight ?? def.titleHighlight).trim(),
+      desc: String(src.desc ?? def.desc).trim(),
+      cardDesc: String(src.cardDesc ?? def.cardDesc ?? def.desc).trim(),
+      pills,
+      bgImage: String(src.bgImage ?? def.bgImage).trim() || def.bgImage,
+    };
+  });
+
+  return {
+    siteLayoutMode,
+    contact,
+    intro,
+    empresa,
+    catalogBanners,
     updatedAt: new Date().toISOString(),
   };
 }
@@ -317,10 +449,13 @@ export function apiServerPlugin() {
         return sendJson(res, 200, { products: products.filter((p) => p.active !== false) });
       }
 
-      // 4. POST /api/products (Crear producto - roles: admin, catalogo)
+      // 4. POST /api/products (Crear producto)
       if (pathname === '/api/products' && method === 'POST') {
         const user = getAuthUser(req);
         if (!user) return sendJson(res, 401, { error: 'No autenticado.' });
+        if (user.role !== 'admin' && !user.permissions.includes('catalog')) {
+          return sendJson(res, 403, { error: 'No tienes permiso para gestionar Catálogo.' });
+        }
 
         const body = await parseBody(req);
         const products = readJson(PRODUCTS_FILE, DEFAULT_PRODUCTS);
@@ -334,6 +469,9 @@ export function apiServerPlugin() {
       if (pathname.startsWith('/api/products/')) {
         const user = getAuthUser(req);
         if (!user) return sendJson(res, 401, { error: 'No autenticado.' });
+        if (user.role !== 'admin' && !user.permissions.includes('catalog')) {
+          return sendJson(res, 403, { error: 'No tienes permiso para gestionar Catálogo.' });
+        }
 
         const prodId = decodeURIComponent(pathname.replace('/api/products/', ''));
         const products = readJson(PRODUCTS_FILE, DEFAULT_PRODUCTS);
@@ -355,25 +493,101 @@ export function apiServerPlugin() {
         }
       }
 
-      // 6. POST /api/upload (Subir foto en base64 al servidor)
+      // 5B. GET / POST / PUT / DELETE /api/banners (Banners / Propaganda del Carrusel)
+      if (pathname === '/api/banners' && method === 'GET') {
+        const banners = readJson(BANNERS_FILE, DEFAULT_BANNERS);
+        const showAll = urlObj.searchParams.get('all') === '1';
+        if (showAll) {
+          const user = getAuthUser(req);
+          if (!user) return sendJson(res, 401, { error: 'No autorizado.' });
+          return sendJson(res, 200, { banners });
+        }
+        return sendJson(res, 200, { banners: banners.filter((b) => b.active !== false) });
+      }
+
+      if (pathname === '/api/banners' && method === 'POST') {
+        const user = getAuthUser(req);
+        if (!user) return sendJson(res, 401, { error: 'No autenticado.' });
+        if (user.role !== 'admin' && !user.permissions.includes('banners')) {
+          return sendJson(res, 403, { error: 'No tienes permiso para gestionar Propaganda / Banners.' });
+        }
+
+        const body = await parseBody(req);
+        const banners = readJson(BANNERS_FILE, DEFAULT_BANNERS);
+        const newBanner = sanitizeBanner(body);
+        banners.push(newBanner);
+        writeJson(BANNERS_FILE, banners);
+        return sendJson(res, 201, { banner: newBanner });
+      }
+
+      if (pathname.startsWith('/api/banners/')) {
+        const user = getAuthUser(req);
+        if (!user) return sendJson(res, 401, { error: 'No autenticado.' });
+        if (user.role !== 'admin' && !user.permissions.includes('banners')) {
+          return sendJson(res, 403, { error: 'No tienes permiso para gestionar Propaganda / Banners.' });
+        }
+
+        const bannerId = decodeURIComponent(pathname.replace('/api/banners/', ''));
+        const banners = readJson(BANNERS_FILE, DEFAULT_BANNERS);
+        const idx = banners.findIndex((b) => b.id === bannerId);
+        if (idx === -1) return sendJson(res, 404, { error: 'Banner no encontrado.' });
+
+        if (method === 'PUT') {
+          const body = await parseBody(req);
+          const updated = sanitizeBanner(body, bannerId);
+          banners[idx] = updated;
+          writeJson(BANNERS_FILE, banners);
+          return sendJson(res, 200, { banner: updated });
+        }
+
+        if (method === 'DELETE') {
+          banners.splice(idx, 1);
+          writeJson(BANNERS_FILE, banners);
+          return sendJson(res, 200, { ok: true });
+        }
+      }
+
+      // 5C. GET / PUT /api/content (Textos principales de la web y Banners de Catálogo)
+      if (pathname === '/api/content' && method === 'GET') {
+        const content = readJson(CONTENT_FILE, DEFAULT_SITE_CONTENT);
+        return sendJson(res, 200, { content: sanitizeSiteContent(content) });
+      }
+
+      if (pathname === '/api/content' && method === 'PUT') {
+        const user = getAuthUser(req);
+        if (!user) return sendJson(res, 401, { error: 'No autenticado.' });
+        if (user.role !== 'admin' && !user.permissions.includes('content')) {
+          return sendJson(res, 403, { error: 'No tienes permiso para gestionar Textos y Banners Web.' });
+        }
+
+        const body = await parseBody(req);
+        const updated = sanitizeSiteContent(body);
+        writeJson(CONTENT_FILE, updated);
+        return sendJson(res, 200, { content: updated });
+      }
+
+      // 6. POST /api/upload (Subir foto o video corto en base64 al servidor)
       if (pathname === '/api/upload' && method === 'POST') {
         const user = getAuthUser(req);
         if (!user) return sendJson(res, 401, { error: 'No autenticado.' });
 
         const body = await parseBody(req);
         const dataUrl = String(body.dataUrl || '');
-        const match = dataUrl.match(/^data:image\/(png|jpeg|jpg|webp|gif);base64,(.+)$/i);
+        const match = dataUrl.match(/^data:(image\/(png|jpeg|jpg|webp|gif)|video\/(mp4|webm));base64,(.+)$/i);
         if (!match) {
-          return sendJson(res, 400, { error: 'Formato de imagen no válido (use PNG, JPG o WEBP).' });
+          return sendJson(res, 400, { error: 'Formato no válido (use PNG, JPG, WEBP, MP4 o WEBM).' });
         }
 
-        const ext = match[1].toLowerCase() === 'jpeg' ? 'jpg' : match[1].toLowerCase();
-        const buffer = Buffer.from(match[2], 'base64');
-        if (buffer.length > 4 * 1024 * 1024) {
-          return sendJson(res, 400, { error: 'La imagen supera el tamaño máximo de 4MB.' });
+        const rawExt = (match[2] || match[3] || 'jpg').toLowerCase();
+        const ext = rawExt === 'jpeg' ? 'jpg' : rawExt;
+        const buffer = Buffer.from(match[4], 'base64');
+        const maxLimit = match[3] ? 14 * 1024 * 1024 : 5 * 1024 * 1024;
+        if (buffer.length > maxLimit) {
+          return sendJson(res, 400, { error: 'El archivo supera el tamaño máximo permitido.' });
         }
 
-        const filename = `prod-${Date.now()}-${crypto.randomBytes(4).toString('hex')}.${ext}`;
+        const prefix = match[3] ? 'video' : 'media';
+        const filename = `${prefix}-${Date.now()}-${crypto.randomBytes(4).toString('hex')}.${ext}`;
         fs.writeFileSync(path.join(UPLOADS_DIR, filename), buffer);
         return sendJson(res, 201, { url: `uploads/${filename}` });
       }
@@ -397,7 +611,16 @@ export function apiServerPlugin() {
           const username = String(body.username || '').trim().toLowerCase();
           const name = String(body.name || '').trim();
           const email = String(body.email || '').trim().toLowerCase();
-          const role = body.role === 'admin' ? 'admin' : 'catalogo';
+          const role = body.role === 'admin' ? 'admin' : 'custom';
+          let permissions = [];
+          if (role === 'admin') {
+            permissions = ['catalog', 'banners', 'content', 'users'];
+          } else if (Array.isArray(body.permissions)) {
+            permissions = body.permissions.filter((p) => ['catalog', 'banners', 'content', 'users'].includes(p));
+            if (permissions.length === 0) permissions = ['catalog'];
+          } else {
+            permissions = ['catalog'];
+          }
           const password = String(body.password || '');
 
           if (!username || username.length < 3) {
@@ -420,6 +643,7 @@ export function apiServerPlugin() {
             name,
             email,
             role,
+            permissions,
             salt,
             passwordHash: hashPassword(password, salt),
             active: true,
@@ -440,7 +664,7 @@ export function apiServerPlugin() {
           const target = users[idx];
 
           // Evitar dejar el sistema sin ningún administrador activo
-          const nextRole = body.role === 'admin' ? 'admin' : body.role === 'catalogo' ? 'catalogo' : target.role;
+          const nextRole = body.role === 'admin' ? 'admin' : (body.role ? 'custom' : target.role);
           const nextActive = body.active !== undefined ? Boolean(body.active) : target.active !== false;
 
           if (target.role === 'admin' && (nextRole !== 'admin' || !nextActive)) {
@@ -452,9 +676,18 @@ export function apiServerPlugin() {
             }
           }
 
+          let nextPermissions = target.permissions || ['catalog'];
+          if (nextRole === 'admin') {
+            nextPermissions = ['catalog', 'banners', 'content', 'users'];
+          } else if (Array.isArray(body.permissions)) {
+            nextPermissions = body.permissions.filter((p) => ['catalog', 'banners', 'content', 'users'].includes(p));
+            if (nextPermissions.length === 0) nextPermissions = ['catalog'];
+          }
+
           target.name = String(body.name || target.name).trim();
           target.email = String(body.email ?? target.email).trim().toLowerCase();
           target.role = nextRole;
+          target.permissions = nextPermissions;
           target.active = nextActive;
 
           if (body.password && String(body.password).length > 0) {

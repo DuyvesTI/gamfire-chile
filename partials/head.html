@@ -4,3 +4,41 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Oswald:wght@500;700&display=swap" />
     <link rel="stylesheet" href="/src/style.css" />
     <link rel="expect" href="#main-content" blocking="render" />
+    <script>
+      (function() {
+        try {
+          var raw = localStorage.getItem('gamfire_catalog_products_v4');
+          var activeSet = {};
+          var hasCache = false;
+          if (raw) {
+            var prods = JSON.parse(raw);
+            if (Array.isArray(prods)) {
+              hasCache = true;
+              for (var i = 0; i < prods.length; i++) {
+                var p = prods[i];
+                if (p && p.active !== false) {
+                  var c = String(p.category || '').toLowerCase();
+                  if (c === 'ropa' || c === 'institucional') c = 'corporativa';
+                  else if (c === 'proteccion' || c === 'herramientas') c = 'fire';
+                  activeSet[c] = true;
+                }
+              }
+            }
+          }
+          var cats = ['corporativa', 'fire', 'seven', 'accesorios'];
+          var css = '';
+          for (var j = 0; j < cats.length; j++) {
+            var cat = cats[j];
+            if (hasCache ? !activeSet[cat] : true) {
+              css += '[data-division-tab="' + cat + '"], [data-division-card="' + cat + '"], [data-footer-division="' + cat + '"], .filter-btn[data-filter="' + cat + '"] { display: none !important; }\n';
+            }
+          }
+          if (css) {
+            var s = document.createElement('style');
+            s.id = 'inline-active-divisions-guard';
+            s.textContent = css;
+            document.head.appendChild(s);
+          }
+        } catch (e) {}
+      })();
+    </script>
