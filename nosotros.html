@@ -2,86 +2,232 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="icon" type="image/png" href="./favicon.png" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="icon" type="image/png" href="./favicon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Oswald:wght@500;700&display=swap" />
     <link rel="expect" href="#main-content" blocking="render" />
+    <script>
+      (function() {
+        try {
+          var raw = localStorage.getItem('gamfire_catalog_products_v4');
+          var activeSet = {};
+          var hasCache = false;
+          if (raw) {
+            var prods = JSON.parse(raw);
+            if (Array.isArray(prods)) {
+              hasCache = true;
+              for (var i = 0; i < prods.length; i++) {
+                var p = prods[i];
+                if (p && p.active !== false) {
+                  var c = String(p.category || '').toLowerCase();
+                  if (c === 'ropa' || c === 'institucional') c = 'corporativa';
+                  else if (c === 'proteccion' || c === 'herramientas') c = 'fire';
+                  activeSet[c] = true;
+                }
+              }
+            }
+          }
+          var cats = ['corporativa', 'fire', 'seven', 'accesorios'];
+          var css = '';
+          for (var j = 0; j < cats.length; j++) {
+            var cat = cats[j];
+            if (hasCache ? !activeSet[cat] : true) {
+              css += '[data-division-tab="' + cat + '"], [data-division-card="' + cat + '"], [data-footer-division="' + cat + '"], .filter-btn[data-filter="' + cat + '"] { display: none !important; }\n';
+            }
+          }
+          if (css) {
+            var s = document.createElement('style');
+            s.id = 'inline-active-divisions-guard';
+            s.textContent = css;
+            document.head.appendChild(s);
+          }
+        } catch (e) {}
+      })();
+    </script>
 
-    <title>Nosotros | Gamfire Chile</title>
-  <script type="module" crossorigin src="./assets/api-DBeL_fvy.js"></script>
-  <script type="module" crossorigin src="./assets/main-B6A-6vkm.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/api-MWEpBJBY.css">
+  <title>Empresa | GAM Chile</title>
+  <meta name="description"
+    content="Conoce a GAM Chile: confección nacional de ropa corporativa, indumentaria Fire de emergencia e insumos certificados.">
+  <script type="module" crossorigin src="./assets/api-BJtW1mGC.js"></script>
+  <script type="module" crossorigin src="./assets/main-BpC41who.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/api-dRXeS7JG.css">
 </head>
 
 <body>
-        <header class="main-header">
-      <div class="container header-content">
-        <a href="index.html" class="logo">
-          <img src="./logo-gam.png" alt="Logo GAM Fire Chile" class="logo-img" width="48" height="48">
-          <span class="logo-text">GAMFIRE</span> <span class="logo-highlight">CHILE</span>
-        </a>
-        <button class="mobile-toggle" aria-label="Menú" aria-expanded="false" aria-controls="main-nav">☰</button>
-        <nav class="main-nav" id="main-nav">
-          <ul>
-            <li><a href="index.html">Inicio</a></li>
-            <li><a href="nosotros.html">Nosotros</a></li>
-            <li><a href="catalogo.html">Catálogo</a></li>
-            <li><a href="contacto.html">Contacto</a></li>
-            <li><a href="onepage.html" class="version-switch-pill" title="Ver versión One-Page (una sola página)">Ver One-Page ➔</a></li>
-          </ul>
-        </nav>
+      <header class="site-header-wrapper">
+      <!-- Franja Superior (Top Bar) estilo Working Apparel con las 4 divisiones principales -->
+      <div class="top-division-bar" role="navigation" aria-label="Divisiones principales GAM Chile">
+        <div class="container top-division-inner">
+          <a href="catalogo.html?categoria=corporativa" class="top-division-tab" data-division-tab="corporativa">CORPORATIVA</a>
+          <a href="catalogo.html?categoria=fire" class="top-division-tab" data-division-tab="fire">FIRE</a>
+          <a href="catalogo.html?categoria=seven" class="top-division-tab" data-division-tab="seven">SEVEN</a>
+          <a href="catalogo.html?categoria=accesorios" class="top-division-tab" data-division-tab="accesorios">ACCESORIOS</a>
+        </div>
+      </div>
+
+      <!-- Cabecera Principal Negra -->
+      <div class="main-header">
+        <div class="container header-content">
+          <a href="index.html" class="logo">
+            <img src="./logo-gam.png" alt="Logo GAM Chile" class="logo-img" width="48" height="48">
+            <span class="logo-text">GAM</span> <span class="logo-highlight">CHILE</span>
+          </a>
+          <button class="mobile-toggle" aria-label="Menú" aria-expanded="false" aria-controls="main-nav">☰</button>
+          <nav class="main-nav" id="main-nav">
+            <ul>
+              <li><a href="index.html">INICIO</a></li>
+              <li><a href="nosotros.html">EMPRESA</a></li>
+              <li><a href="catalogo.html">CATÁLOGO</a></li>
+              <li><a href="contacto.html">CONTACTO</a></li>
+            </ul>
+          </nav>
+        </div>
       </div>
     </header>
 
-    <div id="app">
-        <main id="main-content" class="page-content py-lg">
-            <div class="container">
-                <h1>Quiénes Somos</h1>
-                <section class="about-section">
-                    <p>En Gamfire Chile nos dedicamos a proveer equipamiento de alta calidad para bomberos y equipos de
-                        emergencia. Nuestro compromiso es la seguridad de quienes arriesgan sus vidas.</p>
-                    
-                    <h2 class="mt-md">Nuestra Misión</h2>
-                    <p>Entregar soluciones confiables y certificadas a precios accesibles para las compañías de Chile.</p>
-                    
-                    <h2 class="mt-md">Nuestros Valores</h2>
-                    <ul class="values-list">
-                        <li>✓ Seguridad ante todo</li>
-                        <li>✓ Calidad certificada</li>
-                        <li>✓ Atención personalizada</li>
-                    </ul>
-                </section>
+  <div id="app">
+    <main id="main-content">
+      <!-- Sección Empresa oscura con marca de agua estilo Working Apparel -->
+      <section class="wa-empresa-section">
+        <div class="wa-empresa-watermark" aria-hidden="true"></div>
+        <div class="container wa-empresa-container">
+          <h1 class="wa-empresa-main-title">QUIÉNES <span>SOMOS</span></h1>
+
+          <div class="wa-empresa-copy">
+            <p>
+              En <strong>GAM CHILE</strong> nos especializamos en el diseño y <strong>confección nacional</strong> de uniformes corporativos, ropa técnica de trabajo e indumentaria de emergencia en nuestras líneas <strong>Corporativa, Fire y Seven</strong>, diseñados para brindar la máxima seguridad, representatividad y comodidad a quienes enfrentan riesgos diarios en servicios de emergencia, cuerpos de bomberos, brigadas e industria.
+            </p>
+            <p>
+              Empleamos <strong>proveedores e insumos certificados</strong> que cumplen con rigurosas normativas internacionales para trabajo de emergencia (como <strong>ASTM F1506</strong>, <strong>EN 15614</strong> y <strong>NFPA 2112</strong>, según corresponda), incorporando telas retardantes a la llama, cintas reflectantes 3M, cierres YKK y costuras reforzadas que garantizan calidad y desempeño en cada prenda.
+            </p>
+            <p>
+              Trabajamos en conjunto con cada institución, compañía y empresa, promoviendo el <strong>trabajo en equipo</strong> y el <strong>asesoramiento personalizado</strong> antes, durante y después de tu compra para desarrollar soluciones adaptadas a sus necesidades, tallas (desde niños hasta 6XL) e identidad institucional, respaldados por un servicio de <strong>postventa</strong> confiable y despachos de Arica a Magallanes.
+            </p>
+            <p class="wa-empresa-motto">
+              Nuestro lema: <strong>Calidad, protección certificada y compromiso con la vida.</strong>
+            </p>
+          </div>
+
+          <div class="wa-empresa-blocks">
+            <div class="wa-empresa-block">
+              <h2>1. Misión</h2>
+              <p>
+                <strong>GAM CHILE</strong> entrega soluciones confiables y de alta calidad en confección de vestuario técnico de emergencia, uniformes de bomberos, rescate y <strong>ropa corporativa</strong>, utilizando insumos certificados para apoyar la seguridad y protección integral de voluntarios, brigadistas y trabajadores en todo el país, adaptándonos a los requerimientos específicos de cada compañía, brigada o empresa.
+              </p>
             </div>
-        </main>
-    </div>
-        <footer class="main-footer">
+
+            <div class="wa-empresa-block">
+              <h2>2. Visión</h2>
+              <p>
+                Ser el referente estratégico a nivel nacional en la confección de indumentaria de emergencia y vestuario corporativo a través de nuestras divisiones <strong>Corporativa, Fire, Seven y Accesorios</strong>, destacando por la excelencia de nuestra manufactura chilena, innovación textil y cercanía con cada cliente en todas las regiones del país.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Sección ¿Por qué elegirnos? -->
+      <section class="wa-why-us-section py-xl">
+        <div class="container text-center">
+          <div class="wa-brand-display">
+            <span class="wa-brand-first">GAM</span> <span class="wa-brand-second">CHILE</span>
+          </div>
+          <h2 class="wa-why-subtitle">¿POR QUÉ <strong>ELEGIRNOS?</strong></h2>
+
+          <div class="wa-pillars-grid">
+            <div class="wa-pillar-item">
+              <div class="wa-pillar-icon" aria-hidden="true">
+                <svg viewBox="0 0 64 64" width="68" height="68" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M32 6L10 15v16c0 14.5 9.4 27.6 22 31 12.6-3.4 22-16.5 22-31V15L32 6z"/>
+                  <circle cx="32" cy="31" r="11"/>
+                  <path d="M27 31l3.5 3.5L37.5 27"/>
+                </svg>
+              </div>
+              <p class="wa-pillar-title">CONFECCIÓN DE <strong>CALIDAD</strong></p>
+            </div>
+
+            <div class="wa-pillar-item">
+              <div class="wa-pillar-icon" aria-hidden="true">
+                <svg viewBox="0 0 64 64" width="68" height="68" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="32" cy="24" r="16"/>
+                  <polygon points="32,14 34.9,20 41.5,20.9 36.7,25.5 37.9,32 32,28.9 26.1,32 27.3,25.5 22.5,20.9 29.1,20"/>
+                  <path d="M22 37l-6 20 10-5 6 7 6-7 10 5-6-20"/>
+                </svg>
+              </div>
+              <p class="wa-pillar-title">INSUMOS <strong>CERTIFICADOS</strong></p>
+            </div>
+
+            <div class="wa-pillar-item">
+              <div class="wa-pillar-icon" aria-hidden="true">
+                <svg viewBox="0 0 64 64" width="68" height="68" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M16 28a16 16 0 0 1 32 0"/>
+                  <rect x="11" y="26" width="6" height="12" rx="3"/>
+                  <rect x="47" y="26" width="6" height="12" rx="3"/>
+                  <path d="M47 36c0 5-4 8-11 8h-4"/>
+                  <circle cx="32" cy="27" r="9"/>
+                  <path d="M16 56c2-9 8-13 16-13s14 4 16 13"/>
+                </svg>
+              </div>
+              <p class="wa-pillar-title">ASESORAMIENTO <strong>PERSONALIZADO</strong></p>
+            </div>
+
+            <div class="wa-pillar-item">
+              <div class="wa-pillar-icon" aria-hidden="true">
+                <svg viewBox="0 0 64 64" width="68" height="68" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="10" y="18" width="28" height="24" rx="2"/>
+                  <path d="M38 24h11l7 9v9H38V24z"/>
+                  <circle cx="21" cy="46" r="5"/>
+                  <circle cx="47" cy="46" r="5"/>
+                  <line x1="2" y1="25" x2="7" y2="25"/>
+                  <line x1="4" y1="33" x2="7" y2="33"/>
+                </svg>
+              </div>
+              <p class="wa-pillar-title">ENVÍOS A <strong>TODO CHILE</strong></p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+      <footer class="main-footer">
       <div class="container footer-grid">
         <div class="footer-col">
-          <h3>Gamfire Chile</h3>
-          <p>Equipamiento profesional para bomberos y servicios de emergencia.</p>
+          <h3>GAM Chile</h3>
+          <p>Confección nacional de ropa corporativa, indumentaria Fire de emergencia, línea Seven y accesorios con insumos certificados.</p>
+        </div>
+        <div class="footer-col" data-footer-divisions-col>
+          <h3>Divisiones</h3>
+          <ul>
+            <li data-footer-division="corporativa"><a href="catalogo.html?categoria=corporativa">Corporativa</a></li>
+            <li data-footer-division="fire"><a href="catalogo.html?categoria=fire">Fire</a></li>
+            <li data-footer-division="seven"><a href="catalogo.html?categoria=seven">Seven</a></li>
+            <li data-footer-division="accesorios"><a href="catalogo.html?categoria=accesorios">Accesorios</a></li>
+          </ul>
         </div>
         <div class="footer-col">
           <h3>Enlaces</h3>
           <ul>
             <li><a href="index.html">Inicio</a></li>
+            <li><a href="nosotros.html">Empresa</a></li>
             <li><a href="catalogo.html">Catálogo</a></li>
             <li><a href="contacto.html">Contacto</a></li>
           </ul>
         </div>
         <div class="footer-col">
-          <h3>Síguenos</h3>
+          <h3>Síguenos y Contáctanos</h3>
           <ul>
-            <li><a href="https://www.facebook.com/minibomberito" target="_blank" rel="noopener">Facebook</a></li>
-            <li><a href="https://instagram.com/gamfire.chile" target="_blank" rel="noopener">Instagram</a></li>
-            <li><a href="https://wa.me/56979684064" target="_blank" rel="noopener">WhatsApp +56 9 7968 4064</a></li>
+            <li><a href="https://instagram.com/gam.chile" target="_blank" rel="noopener">Instagram: @gam.chile</a></li>
+            <li><a href="https://www.facebook.com/minibomberito" target="_blank" rel="noopener">Facebook: Gam Fire Chile - Mi Bomberito</a></li>
+            <li><a href="https://wa.me/56979684064" target="_blank" rel="noopener">WhatsApp: +56 9 7968 4064</a></li>
+            <li><a href="mailto:gamfirechile@gmail.com">Email: gamfirechile@gmail.com</a></li>
           </ul>
         </div>
       </div>
       <div class="footer-bottom text-center">
-        <p>&copy; <span id="footer-year">2026</span> Gamfire Chile. Todos los derechos reservados. | Desarrollado por <a href="https://duyvesti.vercel.app" target="_blank" rel="noopener" class="dev-credit">Duyves<span class="ti-highlight">TI</span></a></p>
+        <p>&copy; <span id="footer-year">2026</span> GAM Chile. Todos los derechos reservados. | Desarrollado por <a href="https://duyvesti.vercel.app" target="_blank" rel="noopener" class="dev-credit">Duyves<span class="ti-highlight">TI</span></a></p>
       </div>
     </footer>
 

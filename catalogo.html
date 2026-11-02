@@ -2,101 +2,166 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="icon" type="image/png" href="./favicon.png" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="icon" type="image/png" href="./favicon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Oswald:wght@500;700&display=swap" />
     <link rel="expect" href="#main-content" blocking="render" />
+    <script>
+      (function() {
+        try {
+          var raw = localStorage.getItem('gamfire_catalog_products_v4');
+          var activeSet = {};
+          var hasCache = false;
+          if (raw) {
+            var prods = JSON.parse(raw);
+            if (Array.isArray(prods)) {
+              hasCache = true;
+              for (var i = 0; i < prods.length; i++) {
+                var p = prods[i];
+                if (p && p.active !== false) {
+                  var c = String(p.category || '').toLowerCase();
+                  if (c === 'ropa' || c === 'institucional') c = 'corporativa';
+                  else if (c === 'proteccion' || c === 'herramientas') c = 'fire';
+                  activeSet[c] = true;
+                }
+              }
+            }
+          }
+          var cats = ['corporativa', 'fire', 'seven', 'accesorios'];
+          var css = '';
+          for (var j = 0; j < cats.length; j++) {
+            var cat = cats[j];
+            if (hasCache ? !activeSet[cat] : true) {
+              css += '[data-division-tab="' + cat + '"], [data-division-card="' + cat + '"], [data-footer-division="' + cat + '"], .filter-btn[data-filter="' + cat + '"] { display: none !important; }\n';
+            }
+          }
+          if (css) {
+            var s = document.createElement('style');
+            s.id = 'inline-active-divisions-guard';
+            s.textContent = css;
+            document.head.appendChild(s);
+          }
+        } catch (e) {}
+      })();
+    </script>
 
-    <title>Catálogo | Gamfire Chile</title>
-  <script type="module" crossorigin src="./assets/api-DBeL_fvy.js"></script>
-  <script type="module" crossorigin src="./assets/main-B6A-6vkm.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/api-MWEpBJBY.css">
+  <title>Catálogo y Divisiones | GAM Chile</title>
+  <script type="module" crossorigin src="./assets/api-BJtW1mGC.js"></script>
+  <script type="module" crossorigin src="./assets/main-BpC41who.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/api-dRXeS7JG.css">
 </head>
 
 <body>
-        <header class="main-header">
-      <div class="container header-content">
-        <a href="index.html" class="logo">
-          <img src="./logo-gam.png" alt="Logo GAM Fire Chile" class="logo-img" width="48" height="48">
-          <span class="logo-text">GAMFIRE</span> <span class="logo-highlight">CHILE</span>
-        </a>
-        <button class="mobile-toggle" aria-label="Menú" aria-expanded="false" aria-controls="main-nav">☰</button>
-        <nav class="main-nav" id="main-nav">
-          <ul>
-            <li><a href="index.html">Inicio</a></li>
-            <li><a href="nosotros.html">Nosotros</a></li>
-            <li><a href="catalogo.html">Catálogo</a></li>
-            <li><a href="contacto.html">Contacto</a></li>
-            <li><a href="onepage.html" class="version-switch-pill" title="Ver versión One-Page (una sola página)">Ver One-Page ➔</a></li>
-          </ul>
-        </nav>
+      <header class="site-header-wrapper">
+      <!-- Franja Superior (Top Bar) estilo Working Apparel con las 4 divisiones principales -->
+      <div class="top-division-bar" role="navigation" aria-label="Divisiones principales GAM Chile">
+        <div class="container top-division-inner">
+          <a href="catalogo.html?categoria=corporativa" class="top-division-tab" data-division-tab="corporativa">CORPORATIVA</a>
+          <a href="catalogo.html?categoria=fire" class="top-division-tab" data-division-tab="fire">FIRE</a>
+          <a href="catalogo.html?categoria=seven" class="top-division-tab" data-division-tab="seven">SEVEN</a>
+          <a href="catalogo.html?categoria=accesorios" class="top-division-tab" data-division-tab="accesorios">ACCESORIOS</a>
+        </div>
+      </div>
+
+      <!-- Cabecera Principal Negra -->
+      <div class="main-header">
+        <div class="container header-content">
+          <a href="index.html" class="logo">
+            <img src="./logo-gam.png" alt="Logo GAM Chile" class="logo-img" width="48" height="48">
+            <span class="logo-text">GAM</span> <span class="logo-highlight">CHILE</span>
+          </a>
+          <button class="mobile-toggle" aria-label="Menú" aria-expanded="false" aria-controls="main-nav">☰</button>
+          <nav class="main-nav" id="main-nav">
+            <ul>
+              <li><a href="index.html">INICIO</a></li>
+              <li><a href="nosotros.html">EMPRESA</a></li>
+              <li><a href="catalogo.html">CATÁLOGO</a></li>
+              <li><a href="contacto.html">CONTACTO</a></li>
+            </ul>
+          </nav>
+        </div>
       </div>
     </header>
 
-    <div id="app">
-        <main id="main-content" class="page-content py-lg">
-            <div class="container">
-                <h1>Catálogo de Productos</h1>
+  <div id="app">
+    <main id="main-content">
+      <!-- HERO DINÁMICO POR DIVISIÓN (Cambia según CORPORATIVA / FIRE / SEVEN / ACCESORIOS / TODOS) -->
+      <section class="division-hero" id="division-hero" data-theme="all">
+        <div class="division-hero-bg" id="division-hero-bg" style="background-image: url('hero-banner.jpg');"></div>
+        <div class="division-hero-overlay"></div>
+        <div class="container division-hero-content">
+          <span class="division-hero-badge" id="division-hero-badge">CATÁLOGO GENERAL • GAM CHILE</span>
+          <h1 class="division-hero-title" id="division-hero-title">TODAS NUESTRAS <span>DIVISIONES</span></h1>
+          <p class="division-hero-desc" id="division-hero-desc">
+            Confección 100% nacional con proveedores e insumos certificados. Explora nuestras líneas Corporativa, Fire, Seven y Accesorios o selecciona los productos que deseas cotizar por WhatsApp.
+          </p>
+          <div class="division-hero-pills" id="division-hero-pills">
+            <span class="division-pill">✓ Confección 100% Nacional</span>
+            <span class="division-pill">✓ Insumos Certificados (3M / YKK)</span>
+            <span class="division-pill">✓ Tallas Niños (2) a Adultos (6XL)</span>
+            <span class="division-pill">✓ Envíos a Todo Chile</span>
+          </div>
+        </div>
+      </section>
 
-                <div class="catalog-controls" role="toolbar" aria-label="Filtro de productos">
-                    <button class="filter-btn btn active" data-filter="all" aria-pressed="true">Todos</button>
-                    <button class="filter-btn btn" data-filter="proteccion" aria-pressed="false">Protección</button>
-                    <button class="filter-btn btn" data-filter="ropa" aria-pressed="false">Ropa</button>
-                    <button class="filter-btn btn" data-filter="herramientas" aria-pressed="false">Herramientas</button>
-                    <button class="filter-btn btn" data-filter="accesorios" aria-pressed="false">Accesorios</button>
-                </div>
-
-                <div class="product-grid" id="catalog-grid">
-                    <div class="product-card" data-category="proteccion">
-                        <div class="product-img-placeholder" style="background-image: url('uploads/uniforme-rescate-usar-gersa.jpg');"></div>
-                        <h3>Uniforme Rescate USAR-GERSA</h3>
-                        <span class="category">Protección</span>
-                        <p>Uniformes Rescate GERSA Bomberos, personalizados. Tallas S a 4XL.</p>
-                    </div>
-                    <div class="product-card" data-category="ropa">
-                        <div class="product-img-placeholder" style="background-image: url('uploads/chaqueta-comandante-bomberos.jpg');"></div>
-                        <h3>Chaqueta Comandante Bomberos</h3>
-                        <span class="category">Ropa</span>
-                        <p>Chaqueta impermeable antifluido con bordado reflectante.</p>
-                    </div>
-                    <div class="product-card" data-category="proteccion">
-                        <div class="product-img-placeholder" style="background-image: url('uploads/uniforme-diseno-rosenbauer-adulto-y-ninos.jpg');"></div>
-                        <h3>Uniforme Diseño Rosenbauer - Adulto y Niños</h3>
-                        <span class="category">Protección</span>
-                        <p>Uniformes estilo diseño Alemán Rosenbauer en tallas de Niños y Adultos.</p>
-                    </div>
-                </div>
+      <!-- CONTROLES Y GRILLA DE PRODUCTOS DE LA SECCIÓN -->
+      <section class="page-content py-lg">
+        <div class="container">
+          <div class="division-catalog-bar">
+            <div class="catalog-controls" role="toolbar" aria-label="Filtro por división">
+              <button class="filter-btn btn active" data-filter="all" aria-pressed="true">Todos los Productos</button>
+              <button class="filter-btn btn" data-filter="corporativa" aria-pressed="false">División Corporativa</button>
+              <button class="filter-btn btn" data-filter="fire" aria-pressed="false">División Fire</button>
+              <button class="filter-btn btn" data-filter="seven" aria-pressed="false">División Seven</button>
+              <button class="filter-btn btn" data-filter="accesorios" aria-pressed="false">División Accesorios</button>
             </div>
-        </main>
-    </div>
-        <footer class="main-footer">
+            <p class="division-results-count" id="division-results-count"></p>
+          </div>
+
+          <div class="product-grid" id="catalog-grid"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+      <footer class="main-footer">
       <div class="container footer-grid">
         <div class="footer-col">
-          <h3>Gamfire Chile</h3>
-          <p>Equipamiento profesional para bomberos y servicios de emergencia.</p>
+          <h3>GAM Chile</h3>
+          <p>Confección nacional de ropa corporativa, indumentaria Fire de emergencia, línea Seven y accesorios con insumos certificados.</p>
+        </div>
+        <div class="footer-col" data-footer-divisions-col>
+          <h3>Divisiones</h3>
+          <ul>
+            <li data-footer-division="corporativa"><a href="catalogo.html?categoria=corporativa">Corporativa</a></li>
+            <li data-footer-division="fire"><a href="catalogo.html?categoria=fire">Fire</a></li>
+            <li data-footer-division="seven"><a href="catalogo.html?categoria=seven">Seven</a></li>
+            <li data-footer-division="accesorios"><a href="catalogo.html?categoria=accesorios">Accesorios</a></li>
+          </ul>
         </div>
         <div class="footer-col">
           <h3>Enlaces</h3>
           <ul>
             <li><a href="index.html">Inicio</a></li>
+            <li><a href="nosotros.html">Empresa</a></li>
             <li><a href="catalogo.html">Catálogo</a></li>
             <li><a href="contacto.html">Contacto</a></li>
           </ul>
         </div>
         <div class="footer-col">
-          <h3>Síguenos</h3>
+          <h3>Síguenos y Contáctanos</h3>
           <ul>
-            <li><a href="https://www.facebook.com/minibomberito" target="_blank" rel="noopener">Facebook</a></li>
-            <li><a href="https://instagram.com/gamfire.chile" target="_blank" rel="noopener">Instagram</a></li>
-            <li><a href="https://wa.me/56979684064" target="_blank" rel="noopener">WhatsApp +56 9 7968 4064</a></li>
+            <li><a href="https://instagram.com/gam.chile" target="_blank" rel="noopener">Instagram: @gam.chile</a></li>
+            <li><a href="https://www.facebook.com/minibomberito" target="_blank" rel="noopener">Facebook: Gam Fire Chile - Mi Bomberito</a></li>
+            <li><a href="https://wa.me/56979684064" target="_blank" rel="noopener">WhatsApp: +56 9 7968 4064</a></li>
+            <li><a href="mailto:gamfirechile@gmail.com">Email: gamfirechile@gmail.com</a></li>
           </ul>
         </div>
       </div>
       <div class="footer-bottom text-center">
-        <p>&copy; <span id="footer-year">2026</span> Gamfire Chile. Todos los derechos reservados. | Desarrollado por <a href="https://duyvesti.vercel.app" target="_blank" rel="noopener" class="dev-credit">Duyves<span class="ti-highlight">TI</span></a></p>
+        <p>&copy; <span id="footer-year">2026</span> GAM Chile. Todos los derechos reservados. | Desarrollado por <a href="https://duyvesti.vercel.app" target="_blank" rel="noopener" class="dev-credit">Duyves<span class="ti-highlight">TI</span></a></p>
       </div>
     </footer>
 

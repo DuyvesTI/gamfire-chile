@@ -1,0 +1,102 @@
+{
+  "siteLayoutMode": "multipage",
+  "intro": {
+    "titleMain": "FABRICAMOS",
+    "titleHighlight": "ROPA CORPORATIVA Y DE EMERGENCIA",
+    "paragraph": "En GAM CHILE, nuestro compromiso es proporcionar soluciones de Ropa Corporativa, Indumentaria Fire de Emergencia, Línea Seven y Accesorios de alta calidad, destacando que nuestra confección es 100% nacional. Trabajamos con proveedores e insumos certificados para labores relacionadas con emergencias y alta exigencia (ASTM F1506 o EN 15614, NFPA 2112, según corresponda), junto con cierres YKK y cintas reflectantes 3M, garantizando durabilidad, protección y funcionalidad que reflejan la identidad de tu institución o empresa. Además, ofrecemos atención personalizada y confección por volumen con despachos a todo Chile."
+  },
+  "empresa": {
+    "titleMain": "QUIÉNES",
+    "titleHighlight": "SOMOS",
+    "paragraph1": "En GAM CHILE nos especializamos en el diseño y confección nacional de uniformes corporativos, ropa técnica de trabajo e indumentaria de emergencia en nuestras líneas Corporativa, Fire y Seven, diseñados para brindar la máxima seguridad, representatividad y comodidad a quienes enfrentan riesgos diarios en servicios de emergencia, cuerpos de bomberos, brigadas e industria.",
+    "paragraph2": "Empleamos proveedores e insumos certificados que cumplen con rigurosas normativas internacionales para trabajo de emergencia (como ASTM F1506, EN 15614 y NFPA 2112, según corresponda), incorporando telas retardantes a la llama, cintas reflectantes 3M, cierres YKK y costuras reforzadas que garantizan calidad y desempeño en cada prenda.",
+    "paragraph3": "Trabajamos en conjunto con cada institución, compañía y empresa, promoviendo el trabajo en equipo y el asesoramiento personalizado antes, durante y después de tu compra para desarrollar soluciones adaptadas a sus necesidades, tallas (desde niños hasta 6XL) e identidad institucional, respaldados por un servicio de postventa confiable y despachos de Arica a Magallanes.",
+    "motto": "Nuestro lema: Calidad, protección certificada y compromiso con la vida.",
+    "misionTitle": "1. Misión",
+    "misionText": "GAM CHILE entrega soluciones confiables y de alta calidad en confección de vestuario técnico de emergencia, uniformes de bomberos, rescate y ropa corporativa, utilizando insumos certificados para apoyar la seguridad y protección integral de voluntarios, brigadistas y trabajadores en todo el país, adaptándonos a los requerimientos específicos de cada compañía, brigada o empresa.",
+    "visionTitle": "2. Visión",
+    "visionText": "Ser el referente estratégico a nivel nacional en la confección de indumentaria de emergencia y vestuario corporativo a través de nuestras divisiones Corporativa, Fire, Seven y Accesorios, destacando por la excelencia de nuestra manufactura chilena, innovación textil y cercanía con cada cliente en todas las regiones del país."
+  },
+  "catalogBanners": {
+    "all": {
+      "badge": "CATÁLOGO GENERAL • GAM CHILE",
+      "titleMain": "TODAS NUESTRAS",
+      "titleHighlight": "DIVISIONES",
+      "desc": "Confección 100% nacional con proveedores e insumos certificados. Explora nuestras líneas Corporativa, Fire, Seven y Accesorios o selecciona los productos que deseas cotizar por WhatsApp.",
+      "cardDesc": "Confección 100% nacional con proveedores e insumos certificados. Explora nuestras líneas Corporativa, Fire, Seven y Accesorios o selecciona los productos que deseas cotizar por WhatsApp.",
+      "pills": [
+        "✓ Confección 100% Nacional",
+        "✓ Insumos Certificados (3M / YKK)",
+        "✓ Tallas Niños (2) a Adultos (6XL)",
+        "✓ Envíos a Todo Chile"
+      ],
+      "bgImage": "/hero-banner.jpg"
+    },
+    "corporativa": {
+      "badge": "DIVISIÓN CORPORATIVA • GAM CHILE",
+      "titleMain": "DIVISIÓN",
+      "titleHighlight": "CORPORATIVA",
+      "desc": "Uniformes ejecutivos, institucionales y de cuartel confeccionados en Chile: camisas Oxford y Royal Crop, blusas, pantalones en casimir y gabardina, chaquetas con pala y tenidas de parada personalizadas con bordado.",
+      "cardDesc": "Camisas Oxford, blusas, chaquetas con pala, pantalones de cuartel, uniformes de parada y prendas corporativas personalizadas.",
+      "pills": [
+        "✓ Telas Oxford, Royal Crop, Casimir y Gabardina",
+        "✓ Calce Damas y Varón (Tallas XS a 4XL)",
+        "✓ Bordado Institucional Personalizado",
+        "✓ Ventas por Volumen con Factura"
+      ],
+      "bgImage": "uploads/division-corporativa.jpg"
+    },
+    "fire": {
+      "badge": "DIVISIÓN FIRE • EMERGENCIA Y ALTA EXIGENCIA",
+      "titleMain": "DIVISIÓN",
+      "titleHighlight": "FIRE • EMERGENCIA Y RESCATE",
+      "desc": "Indumentaria de emergencia y rescate de confección nacional con proveedores e insumos certificados (ASTM F1506, EN 15614, NFPA 2112, según corresponda), cintas reflectantes 3M, cierres YKK y costuras reforzadas.",
+      "cardDesc": "Uniformes Multirol antillama, rescate USAR-GERSA, agreste RS 270, camisas ignífugas y diseño Rosenbauer / GRIMP con insumos certificados.",
+      "pills": [
+        "🔥 Normativas NFPA 2112 • ASTM F1506 • EN 15614",
+        "✓ Telas Inherentes Retardantes a la Llama",
+        "✓ Cintas Reflectantes 3M y Cierres YKK",
+        "✓ Tallas Infantiles (2) a Adultos (6XL)"
+      ],
+      "bgImage": "uploads/division-fire.jpg"
+    },
+    "seven": {
+      "badge": "DIVISIÓN SEVEN • DISEÑO Y RENDIMIENTO",
+      "titleMain": "DIVISIÓN",
+      "titleHighlight": "SEVEN",
+      "desc": "Línea especializada SEVEN de GAM Chile: vestuario técnico, táctico y operativo de alto desempeño diseñado para brindar movilidad, resistencia y confort térmico a tu equipo en terreno.",
+      "cardDesc": "Línea especializada SEVEN de GAM Chile. Prendas técnicas, versátiles y de alto rendimiento listas para personalizar para tu equipo.",
+      "pills": [
+        "⚡ Línea Exclusiva SEVEN GAM Chile",
+        "✓ Telas Técnicas Ripstop, Softshell y Térmicas",
+        "✓ Personalización con Bordado y Estampado",
+        "✓ Despachos de Arica a Magallanes"
+      ],
+      "bgImage": "uploads/division-seven.jpg"
+    },
+    "accesorios": {
+      "badge": "DIVISIÓN ACCESORIOS Y GUARDIA • GAM CHILE",
+      "titleMain": "DIVISIÓN",
+      "titleHighlight": "ACCESORIOS Y GUARDIA",
+      "desc": "Complementos institucionales y equipamiento para guardias nocturnas: jockeys, gorros safari y de lana bordados, mochilas de brigada, cobertores y sábanas negras con cinta reflectante y souvenirs 3D.",
+      "cardDesc": "Jockeys y gorros bordados, mochilas, equipamiento de guardia nocturna (cobertores y sábanas con reflectante) y souvenirs 3D.",
+      "pills": [
+        "✓ Jockeys y Gorros con Bordado Full Color",
+        "✓ Cobertores y Sábanas Guardia Nocturna",
+        "✓ Mochilas y Bananos Personalizados",
+        "✓ Souvenirs y Mates Bomberos 3D"
+      ],
+      "bgImage": "uploads/division-accesorios.jpg"
+    }
+  },
+  "updatedAt": "2026-11-02T01:27:55.588Z",
+  "contact": {
+    "whatsappNumber": "+56 9 7968 4064",
+    "whatsappUrl": "https://wa.me/56979684064",
+    "facebookName": "Gam Fire Chile - Mi Bomberito",
+    "facebookUrl": "https://www.facebook.com/minibomberito",
+    "instagramHandle": "@gam.chile",
+    "instagramUrl": "https://instagram.com/gam.chile",
+    "email": "gamfirechile@gmail.com"
+  }
+}

@@ -1,0 +1,72 @@
+[
+  {
+    "id": "banner-aliado",
+    "title": "EL MEJOR",
+    "highlight": "ALIADO",
+    "titleRight": "PARA TU",
+    "highlightRight": "EQUIPO",
+    "badge": "GAM CHILE • CONFECCIÓN 100% NACIONAL",
+    "subtitle": "Uniformes corporativos, tácticos y de emergencia diseñados a la medida de tu institución o empresa.",
+    "layout": "split",
+    "posterImage": "uploads/promo-banner-aliado.jpg",
+    "videoUrl": "uploads/promo-gam-chile.webm",
+    "ctaText": "COTIZA CON NOSOTROS AQUÍ",
+    "ctaLink": "contacto.html",
+    "active": true,
+    "updatedAt": "2026-11-01T00:00:00.000Z"
+  },
+  {
+    "id": "banner-fire-certificado",
+    "title": "PROTECCIÓN E INSUMOS",
+    "highlight": "CERTIFICADOS",
+    "titleRight": "",
+    "highlightRight": "",
+    "badge": "DIVISIÓN FIRE • EMERGENCIA Y ALTA EXIGENCIA",
+    "subtitle": "Confección nacional con proveedores e insumos certificados (NFPA 2112 • ASTM F1506 • EN 15614, según corresponda), cintas reflectantes 3M y cierres YKK.",
+    "layout": "vignette",
+    "posterImage": "uploads/promo-banner-certificado.jpg",
+    "videoUrl": "",
+    "ctaText": "CONOCE LÍNEA FIRE AQUÍ",
+    "ctaLink": "catalogo.html?categoria=fire",
+    "active": true,
+    "updatedAt": "2026-11-01T00:00:00.000Z"
+  },
+  {
+    "id": "banner-nacional-divisiones",
+    "title": "4 DIVISIONES A MEDIDA",
+    "highlight": "ENVÍOS A TODO CHILE",
+    "titleRight": "",
+    "highlightRight": "",
+    "badge": "CORPORATIVA • FIRE • SEVEN • ACCESORIOS",
+    "subtitle": "Desde tallas infantiles (2) hasta adultos (6XL). Atención personalizada para Cuerpos de Bomberos, Brigadas y Empresas.",
+    "layout": "bottom-bar",
+    "posterImage": "uploads/promo-banner-nacional.jpg",
+    "videoUrl": "",
+    "ctaText": "EXPLORAR DIVISIONES AQUÍ",
+    "ctaLink": "catalogo.html",
+    "active": true,
+    "updatedAt": "2026-11-01T00:00:00.000Z"
+  },
+  {
+    "id": "banner-dual-line",
+    "title": "VITRINA MULTILÍNEA",
+    "highlight": "GAM CHILE",
+    "titleRight": "",
+    "highlightRight": "",
+    "badge": "LÍNEAS DESTACADAS GAM CHILE",
+    "subtitle": "Muestra interactiva de nuestras 4 divisiones y prendas destacadas",
+    "layout": "showcase",
+    "productIds": [
+      "uniforme-rescate-usar-gersa",
+      "chaqueta-comandante-bomberos",
+      "cobertor-quilt-guardia",
+      "uniformes-brigada-juvenil"
+    ],
+    "posterImage": "/hero-banner.jpg",
+    "videoUrl": "",
+    "ctaText": "VER CATÁLOGO COMPLETO",
+    "ctaLink": "catalogo.html",
+    "active": true,
+    "updatedAt": "2026-11-01T00:00:00.000Z"
+  }
+]

@@ -10,27 +10,76 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Oswald:wght@500;700&display=swap" />
     <link rel="expect" href="#main-content" blocking="render" />
+    <script>
+      (function() {
+        try {
+          var raw = localStorage.getItem('gamfire_catalog_products_v4');
+          var activeSet = {};
+          var hasCache = false;
+          if (raw) {
+            var prods = JSON.parse(raw);
+            if (Array.isArray(prods)) {
+              hasCache = true;
+              for (var i = 0; i < prods.length; i++) {
+                var p = prods[i];
+                if (p && p.active !== false) {
+                  var c = String(p.category || '').toLowerCase();
+                  if (c === 'ropa' || c === 'institucional') c = 'corporativa';
+                  else if (c === 'proteccion' || c === 'herramientas') c = 'fire';
+                  activeSet[c] = true;
+                }
+              }
+            }
+          }
+          var cats = ['corporativa', 'fire', 'seven', 'accesorios'];
+          var css = '';
+          for (var j = 0; j < cats.length; j++) {
+            var cat = cats[j];
+            if (hasCache ? !activeSet[cat] : true) {
+              css += '[data-division-tab="' + cat + '"], [data-division-card="' + cat + '"], [data-footer-division="' + cat + '"], .filter-btn[data-filter="' + cat + '"] { display: none !important; }\n';
+            }
+          }
+          if (css) {
+            var s = document.createElement('style');
+            s.id = 'inline-active-divisions-guard';
+            s.textContent = css;
+            document.head.appendChild(s);
+          }
+        } catch (e) {}
+      })();
+    </script>
 
-  <title>Panel de Administración | Gamfire Chile</title>
-  <script type="module" crossorigin src="./assets/admin-SGPoSo2I.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/api-DBeL_fvy.js">
-  <link rel="stylesheet" crossorigin href="./assets/api-MWEpBJBY.css">
+  <title>Panel de Administración | GAM Chile</title>
+  <script type="module" crossorigin src="./assets/admin-DjntjkzU.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/api-BJtW1mGC.js">
+  <link rel="stylesheet" crossorigin href="./assets/api-dRXeS7JG.css">
 </head>
 
 <body class="admin-body">
-  <header class="main-header admin-header">
-    <div class="container header-content">
-      <div class="logo">
-        <img src="./logo-gam.png" alt="Logo GAM Fire Chile" class="logo-img" width="48" height="48">
-        <span class="logo-text">GAMFIRE</span> <span class="logo-highlight">ADMIN</span>
-      </div>
-      <div class="admin-header-right">
-        <span id="admin-user-badge" class="admin-user-badge" hidden></span>
-        <a href="catalogo.html" class="btn btn-sm btn-outline" target="_blank" rel="noopener">Ver Catálogo Público ↗</a>
-        <button type="button" id="admin-logout-btn" class="btn btn-sm btn-primary" hidden>Cerrar Sesión</button>
+  <div class="site-header-wrapper admin-header">
+    <div class="top-division-bar">
+      <div class="container top-division-inner">
+        <a href="catalogo.html?categoria=corporativa" class="top-division-tab" data-division-tab="corporativa" target="_blank" rel="noopener">CORPORATIVA ↗</a>
+        <a href="catalogo.html?categoria=fire" class="top-division-tab" data-division-tab="fire" target="_blank" rel="noopener">FIRE ↗</a>
+        <a href="catalogo.html?categoria=seven" class="top-division-tab" data-division-tab="seven" target="_blank" rel="noopener">SEVEN ↗</a>
+        <a href="catalogo.html?categoria=accesorios" class="top-division-tab" data-division-tab="accesorios" target="_blank" rel="noopener">ACCESORIOS ↗</a>
       </div>
     </div>
-  </header>
+    <header class="main-header">
+      <div class="container header-content">
+        <a href="index.html" class="logo" style="text-decoration: none; color: inherit;">
+          <img src="./logo-gam.png" alt="Logo GAM Chile" class="logo-img" width="48" height="48">
+          <span class="logo-text">GAM CHILE</span> <span class="logo-highlight">ADMIN</span>
+        </a>
+        <div class="admin-header-right">
+          <span id="admin-user-badge" class="admin-user-badge" hidden></span>
+          <a href="index.html" id="admin-public-home-link" class="btn btn-sm btn-outline" target="_blank" rel="noopener">Ver Sitio Público ↗</a>
+          <a href="catalogo.html" class="btn btn-sm btn-outline" target="_blank" rel="noopener">Ver Catálogo ↗</a>
+          <button type="button" id="admin-logout-btn" class="btn btn-sm btn-primary" hidden>Cerrar Sesión</button>
+        </div>
+      </div>
+    </header>
+  </div>
 
   <main id="main-content" class="admin-main container py-lg">
     <!-- 1. VISTA DE LOGIN -->
@@ -61,14 +110,32 @@
 
     <!-- 2. PANEL PRINCIPAL (PROTEGIDO) -->
     <section id="admin-dashboard-view" class="admin-dashboard" hidden>
-      <!-- Pestañas de navegación según rol -->
-      <div class="admin-tabs" role="tablist" aria-label="Secciones de administración">
-        <button type="button" class="admin-tab active" data-tab="catalog" role="tab" aria-selected="true" id="tab-btn-catalog">
-          📦 Mantenedor de Catálogo
-        </button>
-        <button type="button" class="admin-tab" data-tab="users" role="tab" aria-selected="false" id="tab-btn-users" hidden>
-          👥 Usuarios y Perfiles (Solo Admin)
-        </button>
+      <!-- Barra de pestañas y selector de Formato Público (Multi-Page vs One-Page) -->
+      <div class="admin-top-controls-row">
+        <div class="admin-tabs" role="tablist" aria-label="Secciones de administración">
+          <button type="button" class="admin-tab active" data-tab="catalog" role="tab" aria-selected="true" id="tab-btn-catalog">
+            📦 Mantenedor de Catálogo
+          </button>
+          <button type="button" class="admin-tab" data-tab="banners" role="tab" aria-selected="false" id="tab-btn-banners">
+            🎬 Propaganda / Banners Carrusel
+          </button>
+          <button type="button" class="admin-tab" data-tab="content" role="tab" aria-selected="false" id="tab-btn-content">
+            📝 Textos y Banners Web
+          </button>
+          <button type="button" class="admin-tab" data-tab="users" role="tab" aria-selected="false" id="tab-btn-users" hidden>
+            👥 Usuarios y Perfiles (Solo Admin)
+          </button>
+        </div>
+
+        <div class="admin-layout-mode-box" role="group" aria-label="Formato visible para los visitantes">
+          <span class="admin-layout-mode-label">🌐 Formato Visitantes:</span>
+          <button type="button" class="admin-layout-mode-btn active" data-quick-layout="multipage" title="Mostrar el sitio dividido en páginas independientes (Inicio, Empresa, Catálogo, Contacto)">
+            📄 Multi-Page
+          </button>
+          <button type="button" class="admin-layout-mode-btn" data-quick-layout="onepage" title="Mostrar todo el sitio integrado en una sola página continua (One-Page)">
+            📜 One-Page
+          </button>
+        </div>
       </div>
 
       <div id="dashboard-feedback" class="admin-alert" role="status" aria-live="polite" hidden></div>
@@ -78,12 +145,34 @@
         <div class="admin-toolbar">
           <div>
             <h2>Productos del Catálogo (<span id="admin-product-count">0</span>)</h2>
-            <p class="admin-subtext">Agrega, edita o desactiva productos, precios, colores y tallas (2 a 6XL).</p>
+            <p class="admin-subtext">Agrega, edita o desactiva productos por división (Corporativa, Fire, Seven, Accesorios), precios, colores y tallas (2 a 6XL).</p>
           </div>
           <div class="admin-toolbar-actions">
-            <input type="search" id="admin-product-search" class="admin-search-input" placeholder="Buscar por nombre o categoría..." aria-label="Buscar producto" />
+            <input type="search" id="admin-product-search" class="admin-search-input" placeholder="Buscar por nombre o división..." aria-label="Buscar producto" />
             <button type="button" id="btn-new-product" class="btn btn-primary">+ Nuevo Producto</button>
           </div>
+        </div>
+
+        <!-- Filtro rápido por las 4 divisiones y Carrusel -->
+        <div class="admin-division-filters" id="admin-division-filters" role="group" aria-label="Filtrar productos por división o carrusel">
+          <button type="button" class="admin-div-chip active" data-div-filter="all">
+            Todas (<span id="count-div-all">0</span>)
+          </button>
+          <button type="button" class="admin-div-chip" data-div-filter="featured">
+            ⭐ En Carrusel (<span id="count-div-featured">0</span>)
+          </button>
+          <button type="button" class="admin-div-chip" data-div-filter="corporativa">
+            👔 Corporativa (<span id="count-div-corporativa">0</span>)
+          </button>
+          <button type="button" class="admin-div-chip" data-div-filter="fire">
+            🔥 Fire (<span id="count-div-fire">0</span>)
+          </button>
+          <button type="button" class="admin-div-chip" data-div-filter="seven">
+            ⚡ Seven (<span id="count-div-seven">0</span>)
+          </button>
+          <button type="button" class="admin-div-chip" data-div-filter="accesorios">
+            🎒 Accesorios (<span id="count-div-accesorios">0</span>)
+          </button>
         </div>
 
         <div class="admin-table-wrap">
@@ -91,7 +180,7 @@
             <thead>
               <tr>
                 <th>Producto</th>
-                <th>Categoría</th>
+                <th>División / Línea</th>
                 <th>Precios (Normal / Oferta)</th>
                 <th>Colores y Tallas</th>
                 <th>Mín. Pedido</th>
@@ -104,14 +193,281 @@
         </div>
       </div>
 
-      <!-- TAB 2: MANTENEDOR DE USUARIOS (SOLO ROL ADMIN) -->
+      <!-- TAB 2: MANTENEDOR DE PROPAGANDA / BANNERS CARRUSEL (<sr7-poster>) -->
+      <div id="tab-panel-banners" class="admin-tab-panel" role="tabpanel" aria-labelledby="tab-btn-banners" hidden>
+        <div class="admin-toolbar">
+          <div>
+            <h2>Propaganda y Banners del Carrusel (<span id="admin-banner-count">0</span>)</h2>
+            <p class="admin-subtext">
+              Administra los slides promocionales estilo <code>&lt;sr7-poster&gt;</code> (con imagen panorámica o video <code>.mp4</code>/<code>.webm</code> y textos superpuestos) del carrusel principal.
+            </p>
+          </div>
+          <div class="admin-toolbar-actions">
+            <button type="button" id="btn-new-banner" class="btn btn-primary">+ Nueva Propaganda / Banner</button>
+          </div>
+        </div>
+
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Poster / Vista Previa</th>
+                <th>Titulares Superpuestos</th>
+                <th>Diseño Visual (Layout)</th>
+                <th>Destino / Enlace</th>
+                <th>Multimedia</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="admin-banners-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB 2B: MANTENEDOR DE TEXTOS PRINCIPALES Y BANNERS DE CATÁLOGO -->
+      <div id="tab-panel-content" class="admin-tab-panel" role="tabpanel" aria-labelledby="tab-btn-content" hidden>
+        <form id="site-content-form" class="admin-content-form" novalidate>
+          <div class="admin-toolbar">
+            <div>
+              <h2>Textos Principales de la Web y Banners de Catálogos</h2>
+              <p class="admin-subtext">
+                Edita los textos de Inicio (<strong>FABRICAMOS ROPA CORPORATIVA Y DE EMERGENCIA</strong>), Empresa (<strong>QUIÉNES SOMOS, Misión y Visión</strong>) y los encabezados de los 5 catálogos (<strong>General, Corporativa, Fire, Seven y Accesorios</strong>).
+              </p>
+            </div>
+            <div class="admin-toolbar-actions">
+              <button type="button" id="btn-reset-site-content" class="btn btn-dark-outline">Restaurar Textos Originales</button>
+              <button type="submit" id="btn-save-site-content-top" class="btn btn-primary">💾 Guardar Cambios Web</button>
+            </div>
+          </div>
+
+          <!-- BLOQUE 0.5: PUNTOS DE CONTACTO Y REDES SOCIALES -->
+          <div class="admin-content-card">
+            <div class="admin-content-card-header">
+              <h3>Puntos de Contacto y Redes Sociales</h3>
+              <span class="badge-mini badge-green">WhatsApp, Facebook, Instagram y Correo</span>
+            </div>
+            <p class="admin-subtext" style="margin-bottom: 0.9rem;">
+              Actualiza los canales oficiales de atención. Se sincronizarán automáticamente en el pie de página, en la página de Contacto, en el cotizador y en el botón flotante de WhatsApp.
+            </p>
+            <div class="admin-form-grid-2">
+              <div class="form-group">
+                <label for="cnt-contact-wa-number">WhatsApp: Teléfono Visible *</label>
+                <input type="text" id="cnt-contact-wa-number" required placeholder="Ej: +56 9 7968 4064" />
+              </div>
+              <div class="form-group">
+                <label for="cnt-contact-wa-url">WhatsApp: Enlace Directo (URL)</label>
+                <input type="text" id="cnt-contact-wa-url" placeholder="Ej: https://wa.me/56979684064" />
+              </div>
+            </div>
+
+            <div class="admin-form-grid-2">
+              <div class="form-group">
+                <label for="cnt-contact-fb-name">Facebook: Nombre o Página Visible</label>
+                <input type="text" id="cnt-contact-fb-name" placeholder="Ej: Gam Fire Chile - Mi Bomberito" />
+              </div>
+              <div class="form-group">
+                <label for="cnt-contact-fb-url">Facebook: Enlace Directo (URL)</label>
+                <input type="text" id="cnt-contact-fb-url" placeholder="Ej: https://www.facebook.com/minibomberito" />
+              </div>
+            </div>
+
+            <div class="admin-form-grid-2">
+              <div class="form-group">
+                <label for="cnt-contact-ig-handle">Instagram: Usuario Visible</label>
+                <input type="text" id="cnt-contact-ig-handle" placeholder="Ej: @gam.chile" />
+              </div>
+              <div class="form-group">
+                <label for="cnt-contact-ig-url">Instagram: Enlace Directo (URL)</label>
+                <input type="text" id="cnt-contact-ig-url" placeholder="Ej: https://instagram.com/gam.chile" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="cnt-contact-email">Correo Electrónico (Email) *</label>
+              <input type="email" id="cnt-contact-email" required placeholder="Ej: gamfirechile@gmail.com" />
+            </div>
+          </div>
+
+          <!-- BLOQUE 1: FABRICAMOS ROPA CORPORATIVA Y DE EMERGENCIA -->
+          <div class="admin-content-card">
+            <div class="admin-content-card-header">
+              <h3>1. Bloque Principal de Inicio: “FABRICAMOS ROPA CORPORATIVA Y DE EMERGENCIA”</h3>
+              <span class="badge-mini badge-green">Visible en Inicio y One-Page</span>
+            </div>
+            <div class="admin-form-grid-2">
+              <div class="form-group">
+                <label for="cnt-intro-title-main">Título Parte 1 (Texto Blanco) *</label>
+                <input type="text" id="cnt-intro-title-main" required placeholder="Ej: FABRICAMOS" />
+              </div>
+              <div class="form-group">
+                <label for="cnt-intro-title-highlight">Título Parte 2 (Destacado Naranja) *</label>
+                <input type="text" id="cnt-intro-title-highlight" required placeholder="Ej: ROPA CORPORATIVA Y DE EMERGENCIA" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="cnt-intro-paragraph">Párrafo Descriptivo Principal *</label>
+              <textarea id="cnt-intro-paragraph" rows="3" required placeholder="Descripción principal de GAM Chile..."></textarea>
+            </div>
+          </div>
+
+          <!-- BLOQUE 2: QUIÉNES SOMOS, MISIÓN Y VISIÓN -->
+          <div class="admin-content-card">
+            <div class="admin-content-card-header">
+              <h3>2. Sección Empresa: “QUIÉNES SOMOS”, Misión y Visión</h3>
+              <span class="badge-mini badge-green">Visible en Empresa y One-Page</span>
+            </div>
+
+            <div class="admin-form-grid-2">
+              <div class="form-group">
+                <label for="cnt-emp-title-main">Título Empresa Parte 1 (Blanco) *</label>
+                <input type="text" id="cnt-emp-title-main" required placeholder="Ej: QUIÉNES" />
+              </div>
+              <div class="form-group">
+                <label for="cnt-emp-title-highlight">Título Empresa Parte 2 (Naranja) *</label>
+                <input type="text" id="cnt-emp-title-highlight" required placeholder="Ej: SOMOS" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="cnt-emp-p1">Párrafo 1 (Presentación y Confección Nacional) *</label>
+              <textarea id="cnt-emp-p1" rows="2" required></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="cnt-emp-p2">Párrafo 2 (Proveedores e Insumos Certificados) *</label>
+              <textarea id="cnt-emp-p2" rows="2" required></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="cnt-emp-p3">Párrafo 3 (Trabajo en Equipo, Tallas y Postventa) *</label>
+              <textarea id="cnt-emp-p3" rows="2" required></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="cnt-emp-motto">Lema Destacado</label>
+              <input type="text" id="cnt-emp-motto" placeholder="Ej: Nuestro lema: Calidad, protección certificada y compromiso con la vida." />
+            </div>
+
+            <div class="admin-form-grid-2" style="margin-top: 0.75rem;">
+              <div class="admin-subcard">
+                <div class="form-group">
+                  <label for="cnt-emp-mision-title">Título Misión *</label>
+                  <input type="text" id="cnt-emp-mision-title" required placeholder="Ej: 1. Misión" />
+                </div>
+                <div class="form-group">
+                  <label for="cnt-emp-mision-text">Texto de la Misión *</label>
+                  <textarea id="cnt-emp-mision-text" rows="4" required></textarea>
+                </div>
+              </div>
+
+              <div class="admin-subcard">
+                <div class="form-group">
+                  <label for="cnt-emp-vision-title">Título Visión *</label>
+                  <input type="text" id="cnt-emp-vision-title" required placeholder="Ej: 2. Visión" />
+                </div>
+                <div class="form-group">
+                  <label for="cnt-emp-vision-text">Texto de la Visión *</label>
+                  <textarea id="cnt-emp-vision-text" rows="4" required></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- BLOQUE 3: BANNERS DE LOS CATÁLOGOS (GENERAL, CORPORATIVA, FIRE, SEVEN, ACCESORIOS) -->
+          <div class="admin-content-card">
+            <div class="admin-content-card-header">
+              <h3>3. Banners de los Catálogos (General, Corporativa, Fire, Seven y Accesorios)</h3>
+              <span class="badge-mini badge-green">Selecciona la línea para editar su Banner</span>
+            </div>
+
+            <div class="admin-division-filters" id="cnt-catalog-banner-tabs" role="group" aria-label="Seleccionar banner de catálogo a editar">
+              <button type="button" class="admin-div-chip active" data-cat-banner-tab="all">
+                🌐 Catálogo General
+              </button>
+              <button type="button" class="admin-div-chip" data-cat-banner-tab="corporativa">
+                👔 Corporativa
+              </button>
+              <button type="button" class="admin-div-chip" data-cat-banner-tab="fire">
+                🔥 Fire
+              </button>
+              <button type="button" class="admin-div-chip" data-cat-banner-tab="seven">
+                ⚡ Seven
+              </button>
+              <button type="button" class="admin-div-chip" data-cat-banner-tab="accesorios">
+                🎒 Accesorios
+              </button>
+            </div>
+
+            <!-- Vista Previa en Vivo del Banner de Catálogo seleccionado -->
+            <div class="bnr-live-preview-section" style="margin-bottom: 1.15rem;">
+              <div class="bnr-live-preview-header">
+                <span>👁️ Vista Previa del Banner de Catálogo (<strong id="cnt-cat-preview-label">Catálogo General</strong>)</span>
+              </div>
+              <div id="cnt-cat-live-preview" class="cnt-cat-live-preview"></div>
+            </div>
+
+            <div class="admin-form-grid-3">
+              <div class="form-group">
+                <label for="cnt-cat-badge">Insignia / Sello Superior *</label>
+                <input type="text" id="cnt-cat-badge" required placeholder="Ej: CATÁLOGO GENERAL • GAM CHILE" />
+              </div>
+              <div class="form-group">
+                <label for="cnt-cat-title-main">Título Parte 1 (Blanco) *</label>
+                <input type="text" id="cnt-cat-title-main" required placeholder="Ej: TODAS NUESTRAS" />
+              </div>
+              <div class="form-group">
+                <label for="cnt-cat-title-highlight">Título Parte 2 (Destacado) *</label>
+                <input type="text" id="cnt-cat-title-highlight" required placeholder="Ej: DIVISIONES" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="cnt-cat-desc">Descripción del Banner en el Catálogo *</label>
+              <textarea id="cnt-cat-desc" rows="2" required placeholder="Descripción principal del banner de esta línea..."></textarea>
+            </div>
+
+            <div class="form-group" id="cnt-cat-card-desc-group" hidden>
+              <label for="cnt-cat-card-desc">Resumen en Tarjeta de Inicio (“Nuestras Divisiones”)</label>
+              <textarea id="cnt-cat-card-desc" rows="2" placeholder="Texto breve que aparece en la tarjeta de esta división en la página de Inicio..."></textarea>
+            </div>
+
+            <div class="admin-form-grid-2">
+              <div class="form-group">
+                <label for="cnt-cat-pills">Etiquetas / Sellos Inferiores <span class="optional">(separados por coma)</span></label>
+                <input type="text" id="cnt-cat-pills" placeholder="Ej: ✓ Confección 100% Nacional, ✓ Insumos Certificados (3M / YKK)" />
+              </div>
+
+              <div class="form-group">
+                <label>Imagen de Fondo del Banner de Catálogo</label>
+                <div class="admin-image-uploader">
+                  <div id="cnt-cat-bg-preview" class="admin-image-preview admin-media-thumb-16x9">Sin fondo</div>
+                  <div class="admin-image-controls">
+                    <label for="cnt-cat-bg-file" class="btn btn-sm btn-dark-outline admin-upload-label">
+                      🖼️ Subir imagen de fondo
+                    </label>
+                    <input type="file" id="cnt-cat-bg-file" accept="image/png,image/jpeg,image/webp" hidden />
+                    <input type="text" id="cnt-cat-bg-url" placeholder="URL de la imagen (uploads/...)" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="admin-content-footer-bar">
+            <button type="submit" id="btn-save-site-content-bottom" class="btn btn-primary">💾 Guardar Todos los Cambios Web</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- TAB 3: MANTENEDOR DE USUARIOS (SOLO ROL ADMIN) -->
       <div id="tab-panel-users" class="admin-tab-panel" role="tabpanel" aria-labelledby="tab-btn-users" hidden>
         <div class="admin-toolbar">
           <div>
             <h2>Gestión de Usuarios y Permisos</h2>
             <p class="admin-subtext">
-              <strong>Perfil Administrador:</strong> Acceso total (Catálogo + Usuarios). |
-              <strong>Perfil Catálogo:</strong> Acceso exclusivo a productos.
+              <strong>Administrador General:</strong> Acceso completo a todo el sistema. |
+              <strong>Usuarios con Permisos:</strong> Puedes asignar uno o más perfiles de acceso (Catálogo, Propaganda, Textos Web o Usuarios).
             </p>
           </div>
           <button type="button" id="btn-new-user" class="btn btn-primary">+ Nuevo Usuario</button>
@@ -124,7 +480,7 @@
                 <th>Usuario</th>
                 <th>Nombre Completo</th>
                 <th>Correo</th>
-                <th>Perfil / Rol</th>
+                <th>Perfiles de Acceso</th>
                 <th>Estado</th>
                 <th>Acciones</th>
               </tr>
@@ -154,11 +510,11 @@
           </div>
 
           <div class="form-group">
-            <label for="prod-category">Categoría *</label>
+            <label for="prod-category">Categoría / Línea *</label>
             <select id="prod-category" required>
-              <option value="proteccion">Protección</option>
-              <option value="ropa">Ropa</option>
-              <option value="herramientas">Herramientas</option>
+              <option value="corporativa">Corporativa</option>
+              <option value="fire">Fire</option>
+              <option value="seven">Seven</option>
               <option value="accesorios">Accesorios</option>
             </select>
           </div>
@@ -195,7 +551,7 @@
           </label>
           <label class="admin-Switch">
             <input type="checkbox" id="prod-featured" />
-            <span>⭐ Destacar en página de Inicio</span>
+            <span>⭐ Destacar en Carrusel de Inicio y Destacados</span>
           </label>
           <label class="admin-Switch">
             <input type="checkbox" id="prod-active" checked />
@@ -255,6 +611,149 @@
     </form>
   </dialog>
 
+  <!-- MODAL CREAR / EDITAR PROPAGANDA / BANNER (<sr7-poster>) -->
+  <dialog id="banner-modal" class="quote-dialog admin-modal admin-banner-modal" aria-labelledby="banner-modal-title">
+    <form id="banner-form" class="quote-form" novalidate>
+      <header class="quote-dialog-header">
+        <h2 id="banner-modal-title">Nueva Propaganda / Banner</h2>
+        <button type="button" class="quote-dialog-close" data-close-modal="banner-modal" aria-label="Cerrar">&times;</button>
+      </header>
+
+      <div class="quote-dialog-body admin-modal-body">
+        <input type="hidden" id="bnr-id" />
+
+        <!-- VISTA PREVIA EN TIEMPO REAL DEL BANNER (<sr7-poster> + Video + Textos) -->
+        <div class="bnr-live-preview-section">
+          <div class="bnr-live-preview-header">
+            <span>👁️ Vista Previa en Tiempo Real (Carrusel Principal)</span>
+            <span id="bnr-live-media-badge" class="badge-mini badge-green">🖼️ Poster &lt;sr7-poster&gt;</span>
+          </div>
+          <div id="bnr-live-preview-stage" class="bnr-live-preview-stage"></div>
+        </div>
+
+        <div class="admin-form-grid-2">
+          <div class="form-group">
+            <label for="bnr-layout">Diseño Visual de la Propaganda *</label>
+            <select id="bnr-layout" required>
+              <option value="split">1. Franja Central Doble + Firma GAM CHILE (Estilo "El Mejor Aliado")</option>
+              <option value="vignette">2. Viñeta Oscura Izquierda + Sello (Estilo "Protección Certificada")</option>
+              <option value="bottom-bar">3. Barra Inferior con Flecha Circular Naranja "&gt;" (Estilo "Envíos / Stock")</option>
+              <option value="showcase">4. Vitrina Multilínea de 6 Tarjetas (Estilo "Dual-Line")</option>
+              <option value="clean">5. Poster / Video Limpio (Cuando el diseño ya viene en la imagen o video)</option>
+            </select>
+          </div>
+
+          <div class="form-group" data-bnr-field-wrap="badge">
+            <label for="bnr-badge">Insignia / Sello Superior o Inferior</label>
+            <input type="text" id="bnr-badge" placeholder="Ej: FÁBRICA DIRECTA • GAM CHILE" />
+          </div>
+        </div>
+
+        <div class="admin-form-grid-2" id="bnr-title-highlight-group">
+          <div class="form-group" data-bnr-field-wrap="title">
+            <label for="bnr-title">
+              <span id="bnr-title-label-text">Línea Principal (Texto Blanco) *</span>
+            </label>
+            <input type="text" id="bnr-title" required placeholder="Ej: EL MEJOR ALIADO" />
+          </div>
+
+          <div class="form-group" data-bnr-field-wrap="highlight">
+            <label for="bnr-highlight">Línea Destacada (Texto Naranja)</label>
+            <input type="text" id="bnr-highlight" placeholder="Ej: PARA TU EQUIPO" />
+          </div>
+        </div>
+
+        <div class="admin-form-grid-2" id="bnr-split-right-group">
+          <div class="form-group" data-bnr-field-wrap="titleRight">
+            <label for="bnr-title-right">Bloque Derecho - Línea Blanca</label>
+            <input type="text" id="bnr-title-right" placeholder="Ej: PARA TU" />
+          </div>
+
+          <div class="form-group" data-bnr-field-wrap="highlightRight">
+            <label for="bnr-highlight-right">Bloque Derecho - Línea Naranja</label>
+            <input type="text" id="bnr-highlight-right" placeholder="Ej: EQUIPO" />
+          </div>
+        </div>
+
+        <div class="form-group" data-bnr-field-wrap="subtitle">
+          <label for="bnr-subtitle">Subtítulo / Certificaciones / Detalle</label>
+          <input type="text" id="bnr-subtitle" placeholder="Ej: CORPORATIVA • FIRE • SEVEN • ACCESORIOS" />
+        </div>
+
+        <!-- SELECTOR DE PRODUCTOS ACTIVOS PARA OPCIÓN 4 (VITRINA MULTILÍNEA) -->
+        <div class="form-group bnr-showcase-picker-box" id="bnr-showcase-products-group" data-bnr-field-wrap="productIds">
+          <div class="sizes-header-bar">
+            <label>📦 Productos Activos a Mostrar en la Vitrina (Máx. 6 tarjetas)</label>
+            <div class="sizes-quick-btns">
+              <span id="bnr-selected-prods-count" class="badge-mini badge-green">0 / 6 seleccionados</span>
+              <button type="button" class="btn-chip" id="bnr-prods-select-all">Seleccionar primeros 6</button>
+              <button type="button" class="btn-chip" id="bnr-prods-clear">Limpiar</button>
+            </div>
+          </div>
+          <div id="bnr-showcase-products-list" class="bnr-showcase-products-grid"></div>
+        </div>
+
+        <div class="admin-form-grid-2">
+          <div class="form-group">
+            <label for="bnr-cta-text">Texto del Botón (CTA)</label>
+            <input type="text" id="bnr-cta-text" placeholder="Ej: EXPLORAR CATÁLOGO" />
+          </div>
+
+          <div class="form-group">
+            <label for="bnr-cta-link">Enlace al hacer clic *</label>
+            <input type="text" id="bnr-cta-link" value="catalogo.html" required placeholder="Ej: catalogo.html?categoria=fire" />
+          </div>
+        </div>
+
+        <div class="admin-checkbox-row">
+          <label class="admin-Switch">
+            <input type="checkbox" id="bnr-active" checked />
+            <span>✅ Propaganda Activa (Visible en el Carrusel de Inicio)</span>
+          </label>
+        </div>
+
+        <!-- MULTIMEDIA EN 2 COLUMNAS CON MINIATURAS 16:9 -->
+        <div class="admin-form-grid-2">
+          <!-- Imagen Poster <sr7-poster> -->
+          <div class="form-group">
+            <label>Imagen de Fondo <code>&lt;sr7-poster&gt;</code> (16:9) *</label>
+            <div class="admin-image-uploader">
+              <div id="bnr-poster-preview" class="admin-image-preview admin-media-thumb-16x9">Sin poster</div>
+              <div class="admin-image-controls">
+                <label for="bnr-poster-file" class="btn btn-sm btn-dark-outline admin-upload-label">
+                  🖼️ Subir imagen Poster
+                </label>
+                <input type="file" id="bnr-poster-file" accept="image/png,image/jpeg,image/webp" hidden />
+                <input type="text" id="bnr-poster-url" placeholder="URL del poster (uploads/...)" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Video HTML5 opcional (.mp4 / .webm) -->
+          <div class="form-group">
+            <label for="bnr-video-url">Video Opcional (<code>.webm</code> / <code>.mp4</code> máx. 15 MB)</label>
+            <div class="admin-image-uploader">
+              <div id="bnr-video-preview" class="admin-image-preview admin-media-thumb-16x9">Sin video</div>
+              <div class="admin-image-controls">
+                <label for="bnr-video-file" class="btn btn-sm btn-dark-outline admin-upload-label">
+                  🎥 Subir video .WEBM / .MP4
+                </label>
+                <input type="file" id="bnr-video-file" accept="video/mp4,video/webm" hidden />
+                <input type="text" id="bnr-video-url" placeholder="Opcional: uploads/promo-gam-chile.webm" />
+                <button type="button" id="bnr-video-clear" class="btn-link-danger">Quitar video</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer class="quote-dialog-footer">
+        <button type="button" class="btn btn-dark-outline" data-close-modal="banner-modal">Cancelar</button>
+        <button type="submit" id="bnr-save-btn" class="btn btn-primary">Guardar Propaganda</button>
+      </footer>
+    </form>
+  </dialog>
+
   <!-- MODAL CREAR / EDITAR USUARIO (SOLO ADMIN) -->
   <dialog id="user-modal" class="quote-dialog admin-modal" aria-labelledby="user-modal-title">
     <form id="user-form" class="quote-form" novalidate>
@@ -273,29 +772,80 @@
           </div>
 
           <div class="form-group">
-            <label for="usr-role">Perfil de Acceso *</label>
-            <select id="usr-role" required>
-              <option value="catalogo">Catálogo (Solo gestiona productos)</option>
-              <option value="admin">Administrador (Catálogo + Usuarios)</option>
-            </select>
+            <label for="usr-name">Nombre Completo *</label>
+            <input type="text" id="usr-name" required placeholder="Ej: Juan Pérez" />
           </div>
         </div>
 
         <div class="admin-form-grid-2">
           <div class="form-group">
-            <label for="usr-name">Nombre Completo *</label>
-            <input type="text" id="usr-name" required placeholder="Ej: Juan Pérez" />
-          </div>
-
-          <div class="form-group">
             <label for="usr-email">Correo Electrónico</label>
             <input type="email" id="usr-email" placeholder="juan@gamfire.cl" />
           </div>
+
+          <div class="form-group">
+            <label for="usr-password" id="usr-password-label">Contraseña (mín. 8 caracteres) *</label>
+            <input type="password" id="usr-password" minlength="8" placeholder="Mínimo 8 caracteres" />
+          </div>
         </div>
 
-        <div class="form-group">
-          <label for="usr-password" id="usr-password-label">Contraseña (mín. 8 caracteres) *</label>
-          <input type="password" id="usr-password" minlength="8" placeholder="Mínimo 8 caracteres" />
+        <!-- TIPO DE ROL Y PERFILES DE ACCESO -->
+        <div class="form-group" style="margin-top: 0.5rem;">
+          <label>Nivel de Cuenta y Perfil de Acceso *</label>
+          <div class="admin-account-type-toggle">
+            <label class="account-type-card" id="label-usr-type-admin">
+              <input type="radio" name="usr-account-type" id="usr-type-admin" value="admin" />
+              <div class="account-type-content">
+                <strong>🛡️ Administrador General</strong>
+                <small>Acceso completo y total a todos los módulos</small>
+              </div>
+            </label>
+            <label class="account-type-card" id="label-usr-type-custom">
+              <input type="radio" name="usr-account-type" id="usr-type-custom" value="custom" checked />
+              <div class="account-type-content">
+                <strong>⚙️ Perfiles Seleccionados</strong>
+                <small>Asignar 1 o más perfiles de acceso específicos</small>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- SELECTOR DE PERFILES ESPECÍFICOS -->
+        <div class="form-group" id="usr-permissions-container">
+          <label>Perfiles de Acceso Permitidos * (Selecciona 1 o más)</label>
+          <div class="admin-perm-checkboxes-grid">
+            <label class="perm-checkbox-item" id="label-perm-catalog">
+              <input type="checkbox" name="usr-perm" value="catalog" id="perm-catalog" />
+              <div class="perm-checkbox-info">
+                <strong>📦 Catálogo</strong>
+                <small>Gestión de productos, categorías, tallas y precios</small>
+              </div>
+            </label>
+            <label class="perm-checkbox-item" id="label-perm-banners">
+              <input type="checkbox" name="usr-perm" value="banners" id="perm-banners" />
+              <div class="perm-checkbox-info">
+                <strong>🎬 Propaganda / Banner y Carrusel</strong>
+                <small>Slides promocionales, videos y posters del carrusel</small>
+              </div>
+            </label>
+            <label class="perm-checkbox-item" id="label-perm-content">
+              <input type="checkbox" name="usr-perm" value="content" id="perm-content" />
+              <div class="perm-checkbox-info">
+                <strong>📝 Textos y Banners Web</strong>
+                <small>Textos principales de inicio, empresa y encabezados</small>
+              </div>
+            </label>
+            <label class="perm-checkbox-item" id="label-perm-users">
+              <input type="checkbox" name="usr-perm" value="users" id="perm-users" />
+              <div class="perm-checkbox-info">
+                <strong>👥 Usuarios</strong>
+                <small>Administración de cuentas y perfiles de acceso</small>
+              </div>
+            </label>
+          </div>
+          <div id="usr-perm-hint" class="admin-subtext" style="margin-top: 0.35rem; color: #b45309;" hidden>
+            ⚠️ El Administrador General incluye automáticamente todos los perfiles con acceso total.
+          </div>
         </div>
 
         <div class="admin-checkbox-row">
