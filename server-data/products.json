@@ -23,9 +23,9 @@
       "4XL"
     ],
     "minOrderQty": 6,
-    "featured": false,
-    "active": false,
-    "updatedAt": "2026-11-02T01:24:00.444Z"
+    "featured": true,
+    "active": true,
+    "updatedAt": "2026-11-02T04:01:58.888Z"
   },
   {
     "id": "chaqueta-comandante-bomberos",
@@ -49,9 +49,9 @@
       "3XL"
     ],
     "minOrderQty": 1,
-    "featured": false,
-    "active": false,
-    "updatedAt": "2026-11-02T01:07:35.556Z"
+    "featured": true,
+    "active": true,
+    "updatedAt": "2026-11-02T04:02:08.145Z"
   },
   {
     "id": "uniforme-diseno-rosenbauer-adulto-y-ninos",
