@@ -215,9 +215,9 @@
     ],
     "sizes": [],
     "minOrderQty": 6,
-    "featured": false,
-    "active": false,
-    "updatedAt": "2026-11-02T01:08:08.226Z"
+    "featured": true,
+    "active": true,
+    "updatedAt": "2026-11-02T04:02:17.947Z"
   },
   {
     "id": "uniformes-brigada-juvenil",
@@ -249,9 +249,9 @@
       "2XL"
     ],
     "minOrderQty": 1,
-    "featured": false,
-    "active": false,
-    "updatedAt": "2026-11-02T01:08:12.395Z"
+    "featured": true,
+    "active": true,
+    "updatedAt": "2026-11-02T04:02:26.369Z"
   },
   {
     "id": "pantalon-blanco",
