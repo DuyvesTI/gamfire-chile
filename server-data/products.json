@@ -56,7 +56,7 @@
   {
     "id": "uniforme-diseno-rosenbauer-adulto-y-ninos",
     "name": "Uniforme Diseño Rosenbauer - Adulto y Niños",
-    "category": "fire",
+    "category": "accesorios",
     "description": "Buscas esta linea de diseño en tus uniformes? Uniformes estilo diseño Alemán Rosenbauer GAM FIRE lo confeccionamos para ti. Tallas de Niños (BJ) y para Adultos. Tallas desde 6 a 4xl. Enviamos a todo el pais. Cotiza con nosotros, GAM FIRE puede ser tu mejor alternativa! Contáctanos al +56979684064",
     "image": "uploads/uniforme-diseno-rosenbauer-adulto-y-ninos.jpg",
     "normalPrice": 120000,
@@ -85,8 +85,8 @@
     ],
     "minOrderQty": 1,
     "featured": false,
-    "active": false,
-    "updatedAt": "2026-11-02T01:07:42.645Z"
+    "active": true,
+    "updatedAt": "2026-11-08T01:57:07.836Z"
   },
   {
     "id": "camisa-cuartel",
