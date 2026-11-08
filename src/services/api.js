@@ -5,7 +5,7 @@ import { DEFAULT_PRODUCTS, DEFAULT_BANNERS, DEFAULT_SITE_CONTENT, normalizeCateg
 const TOKEN_KEY = 'gamfire_auth_token';
 const LOCAL_PRODUCTS_KEY = 'gamfire_catalog_products_v4';
 const LOCAL_BANNERS_KEY = 'gamfire_carousel_banners_v1';
-const LOCAL_CONTENT_KEY = 'gamfire_site_content_v2';
+const LOCAL_CONTENT_KEY = 'gamfire_site_content_v3';
 const LOCAL_USERS_KEY = 'gamfire_catalog_users_v1';
 
 const RAW_BASE = import.meta.env?.BASE_URL || './';

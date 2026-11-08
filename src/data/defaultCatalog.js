@@ -867,9 +867,9 @@ export const DEFAULT_SITE_CONTENT = {
       badge: 'DIVISIÓN ACCESORIOS Y GUARDIA • GAM CHILE',
       titleMain: 'DIVISIÓN',
       titleHighlight: 'ACCESORIOS Y GUARDIA',
-      desc: 'Complementos institucionales y equipamiento para guardias nocturnas: jockeys, gorros safari y de lana bordados, mochilas de brigada, cobertores y sábanas negras con cinta reflectante y souvenirs 3D.',
+      desc: 'Artículos tradicionales de alta rotación como jockeys, mochilas, artículos 3d personalizados, pines, medallas acrílicas, galvanos; imanes para nevera, llaveros, tazas, camisetas con diseños locales, bolsas de tela (tote bags) eco-amigables, entre otros artículos mas. Además de servicios de estampados y bordados.',
       cardDesc:
-        'Jockeys y gorros bordados, mochilas, equipamiento de guardia nocturna (cobertores y sábanas con reflectante) y souvenirs 3D.',
+        'Artículos tradicionales de alta rotación como jockeys, mochilas, artículos 3d personalizados, pines, medallas acrílicas, galvanos; imanes para nevera, llaveros, tazas, camisetas con diseños locales, bolsas de tela (tote bags) eco-amigables, entre otros artículos mas. Además de servicios de estampados y bordados.',
       pills: [
         '✓ Jockeys y Gorros con Bordado Full Color',
         '✓ Cobertores y Sábanas Guardia Nocturna',

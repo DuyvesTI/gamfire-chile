@@ -36,7 +36,7 @@ const DIVISION_META = {
       {
         tag: 'PRÓXIMO INGRESO',
         title: 'División ACCESORIOS',
-        desc: 'Jockeys y gorros bordados, cobertores y sábanas para guardia nocturna, mochilas y artículos institucionales.',
+        desc: 'Artículos tradicionales de alta rotación como jockeys, mochilas, artículos 3d personalizados, pines, medallas acrílicas, galvanos; imanes para nevera, llaveros, tazas, camisetas con diseños locales, bolsas de tela (tote bags) eco-amigables, entre otros artículos mas. Además de servicios de estampados y bordados.',
       },
     ],
   },
@@ -152,7 +152,7 @@ const DIVISION_META = {
     pageTitle: 'División Accesorios | GAM Chile',
     badge: 'DIVISIÓN ACCESORIOS Y GUARDIA • GAM CHILE',
     titleHtml: 'DIVISIÓN <span>ACCESORIOS Y GUARDIA</span>',
-    desc: 'Complementos institucionales y equipamiento para guardias nocturnas: jockeys, gorros safari y de lana bordados, mochilas de brigada, cobertores y sábanas negras con cinta reflectante y souvenirs 3D.',
+    desc: 'Artículos tradicionales de alta rotación como jockeys, mochilas, artículos 3d personalizados, pines, medallas acrílicas, galvanos; imanes para nevera, llaveros, tazas, camisetas con diseños locales, bolsas de tela (tote bags) eco-amigables, entre otros artículos mas. Además de servicios de estampados y bordados.',
     bgImage: 'uploads/division-accesorios.jpg',
     theme: 'accesorios',
     pills: [
