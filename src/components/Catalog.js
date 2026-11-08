@@ -26,7 +26,7 @@ const DIVISION_META = {
       {
         tag: 'PRÓXIMO INGRESO',
         title: 'División CORPORATIVA',
-        desc: 'Camisas, blusas, pantalones de cuartel, chaquetas institucionales y uniformes de parada confeccionados en Chile.',
+        desc: 'Nos especializamos en transformar la vestimenta laboral en una poderosa herramienta de identidad de marca, combinando elegancia, durabilidad en camisas de oxford y gabardina, blusas, pantalones de vestir, pantalones tipo cargo, poleras, chaquetas, parkas, uniforme institucional de oficina; manteniendo un estándar de presentación impecable.',
       },
       {
         tag: 'PRÓXIMO INGRESO',
@@ -44,7 +44,7 @@ const DIVISION_META = {
     pageTitle: 'División Corporativa | GAM Chile',
     badge: 'DIVISIÓN CORPORATIVA • GAM CHILE',
     titleHtml: 'DIVISIÓN <span>CORPORATIVA</span>',
-    desc: 'Uniformes ejecutivos, institucionales y de cuartel confeccionados en Chile: camisas Oxford y Royal Crop, blusas, pantalones en casimir y gabardina, chaquetas con pala y tenidas de parada personalizadas con bordado.',
+    desc: 'Nos especializamos en transformar la vestimenta laboral en una poderosa herramienta de identidad de marca, combinando elegancia, durabilidad en camisas de oxford y gabardina, blusas, pantalones de vestir, pantalones tipo cargo, poleras, chaquetas, parkas, uniforme institucional de oficina; manteniendo un estándar de presentación impecable.',
     bgImage: 'uploads/division-corporativa.jpg',
     theme: 'corporativa',
     pills: [
